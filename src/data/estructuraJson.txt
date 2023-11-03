@@ -1,0 +1,20 @@
+root: {
+  unidad: {
+	folders: [
+          {
+		id: string,
+		name: string
+		files: Files[]
+		folders: Folders[]
+  	  }		
+        ],
+	files: [
+	    {
+		id: string
+		name: string
+		url: string
+		tags: string[]
+	    }
+	]
+  }
+}
