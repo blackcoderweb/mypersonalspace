@@ -1,9 +1,11 @@
 import Card from 'react-bootstrap/Card';
+import { SingleAccordion } from './SingleAccordion';
 
-export const Aside = (children) => {
+
+export const Aside = () => {
   return (
-    <Card>
-      <Card.Body>{children}</Card.Body>
+    <Card style={{ width: "20%", height: '100vh'}}>
+      <SingleAccordion />
     </Card>
   );
 };

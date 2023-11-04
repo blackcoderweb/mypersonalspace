@@ -2,19 +2,24 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Login } from "./pages/Authentication/Login";
-import { Dashboard } from "./pages/Layout/Dashboard";
 import { NotFound } from "./pages/NotFound/NotFound";
+import { Dashboard } from "./pages/Dashboard/Dashboard";
+import { UserContext } from "./context/UserContext";
+import { useState } from "react";
 
 function App() {
+  const [user, setUser] = useState("");
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route index element={<Login />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/user/:username" element={<Dashboard />} />
-        <Route path="*" element={<NotFound />} />
-      </Routes>
-    </BrowserRouter>
+    <UserContext.Provider value={{ user, setUser }}>
+      <BrowserRouter>
+        <Routes>
+          <Route index element={<Login />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/:userName" element={<Dashboard />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </BrowserRouter>
+    </UserContext.Provider>
   );
 }
 

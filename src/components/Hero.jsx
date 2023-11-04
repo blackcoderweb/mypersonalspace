@@ -1,9 +1,9 @@
 import Card from 'react-bootstrap/Card';
 
-export const Hero = (children) => {
+export const Hero = () => {
   return (
     <Card>
-      <Card.Body>{children}</Card.Body>
+      
     </Card>
   )
 }
