@@ -1,14 +1,13 @@
-import { useContext } from "react";
 import Button from "react-bootstrap/Button";
 import Container from "react-bootstrap/Container";
 import Form from "react-bootstrap/Form";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
-import { UserContext } from "../context/UserContext";
 
 export const Navigation = () => {
-  const {user, setUser} = useContext(UserContext);
+  
+  const loggedUser = localStorage.getItem("user");
 
   return (
       <Navbar expand="lg" className="bg-body-tertiary justify-content-left">
@@ -37,15 +36,8 @@ export const Navigation = () => {
               <Button variant="outline-primary">Buscar</Button>
             </Form>
             <Navbar.Text>Hola: 
-            <NavDropdown title={user} id="navbarScrollingDropdown">
-                <NavDropdown.Item href="#action3">Cerrar sesión</NavDropdown.Item>
-                <NavDropdown.Item href="#action4">
-                  Another action
-                </NavDropdown.Item>
-                <NavDropdown.Divider />
-                <NavDropdown.Item href="#action5">
-                  Something else here
-                </NavDropdown.Item>
+            <NavDropdown title={loggedUser} id="navbarScrollingDropdown">
+                <NavDropdown.Item>Cerrar sesión</NavDropdown.Item>
               </NavDropdown>
             </Navbar.Text>
           </Navbar.Collapse>

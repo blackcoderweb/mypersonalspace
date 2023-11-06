@@ -6,8 +6,7 @@ import Form from "react-bootstrap/Form";
 import Card from "react-bootstrap/Card";
 import Alert from "react-bootstrap/Alert";
 import { users } from "../../data/testData";
-import { useContext, useState } from "react";
-import {UserContext} from "../../context/UserContext"
+import { useState } from "react";
 
 /*const validate = (values) => {
   const errors = {};
@@ -27,7 +26,6 @@ export const Login = () => {
   const navigate = useNavigate();
   const [error, setError] = useState(false);
   const [show, setShow] = useState(null);
-  const { setUser } = useContext(UserContext);
 
   const formik = useFormik({
     initialValues: {
@@ -43,8 +41,9 @@ export const Login = () => {
       if (!userToLog || userToLog.pass !== values.password) {
         setError(true);
       } else {
+        localStorage.setItem("user", values.userName);
         navigate(`/${values.userName}/`);
-        setUser(values.userName);
+        
       }
     },
   });
