@@ -4,6 +4,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { Login } from "./pages/Authentication/Login";
 import { NotFound } from "./pages/NotFound/NotFound";
 import { Dashboard } from "./pages/Dashboard/Dashboard";
+import { ProtectedRoute } from "./components/ProtectedRoute";
 
 
 function App() {
@@ -13,7 +14,10 @@ function App() {
         <Routes>
           <Route index element={<Login />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/:userName" element={<Dashboard />} />
+          <Route path="/:userName" element={
+          <ProtectedRoute>
+            <Dashboard />
+          </ProtectedRoute>} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
