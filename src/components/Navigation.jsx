@@ -4,10 +4,11 @@ import Form from "react-bootstrap/Form";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
+import useAuth from "../hooks/useAuth";
 
 export const Navigation = () => {
   
-  const loggedUser = localStorage.getItem("user");
+  const {auth} = useAuth()
 
   return (
       <Navbar expand="lg" className="bg-body-tertiary justify-content-left">
@@ -36,8 +37,9 @@ export const Navigation = () => {
               <Button variant="outline-primary">Buscar</Button>
             </Form>
             <Navbar.Text>Hola: 
-            <NavDropdown title={loggedUser} id="navbarScrollingDropdown">
-                <NavDropdown.Item>Cerrar sesión</NavDropdown.Item>
+            <NavDropdown title={auth} id="navbarScrollingDropdown">
+                <NavDropdown.Item href="/dashboard/logout">Cerrar sesión
+                </NavDropdown.Item>
               </NavDropdown>
             </Navbar.Text>
           </Navbar.Collapse>

@@ -1,12 +1,12 @@
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { useNavigate } from "react-router-dom";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Card from "react-bootstrap/Card";
 import Alert from "react-bootstrap/Alert";
 import { users } from "../../data/testData";
 import { useState } from "react";
+import useAuth from "../../hooks/useAuth";
 
 /*const validate = (values) => {
   const errors = {};
@@ -22,10 +22,9 @@ import { useState } from "react";
 };*/
 
 export const Login = () => {
-
-  const navigate = useNavigate();
   const [error, setError] = useState(false);
   const [show, setShow] = useState(null);
+  const { setAuth } = useAuth();
 
   const formik = useFormik({
     initialValues: {
@@ -42,8 +41,9 @@ export const Login = () => {
         setError(true);
       } else {
         localStorage.setItem("user", values.userName);
-        navigate(`/${values.userName}/`);
-        
+        setAuth(userToLog.userName);
+
+        window.location.href = `/dashboard/`;
       }
     },
   });
@@ -57,11 +57,9 @@ export const Login = () => {
         {error && (
           <Alert variant="danger" onClose={() => setShow(false)} dismissible>
             <Alert.Heading>Usuario y/o contraseña no válidos</Alert.Heading>
-            <p>
-              Intente nuevamente
-            </p>
+            <p>Intente nuevamente</p>
           </Alert>
-        )} 
+        )}
         <Form onSubmit={formik.handleSubmit}>
           <Form.Group className="mb-3">
             <Form.Label>Usuario</Form.Label>
