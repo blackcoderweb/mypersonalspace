@@ -8,8 +8,11 @@ export const Dashboard = () => {
   return (
     <Card style={{ width: "100vw", height: "100vh" }}>
         <Navigation />
+        <div style={{ display: 'flex' }}>
         <Aside />
         <Hero />
+        </div>
+       
     </Card>
   )
 }

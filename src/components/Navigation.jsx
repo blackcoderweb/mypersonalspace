@@ -11,9 +11,9 @@ export const Navigation = () => {
   const {auth} = useAuth()
 
   return (
-      <Navbar expand="lg" className="bg-body-tertiary justify-content-left">
+      <Navbar expand="lg" className="bg-body-tertiary" style={{ height: '10vh'}}>
         <Container fluid>
-          <Navbar.Brand href="#">Navbar scroll</Navbar.Brand>
+          <Navbar.Brand>My personal space</Navbar.Brand>
           <Navbar.Toggle aria-controls="navbarScroll" />
           <Navbar.Collapse id="navbarScroll">
             <Nav
@@ -22,6 +22,7 @@ export const Navigation = () => {
               navbarScroll
             >
             </Nav>
+            <div style={{ width: '100%',display: 'flex', justifyContent:'center' }}>
             <Form className="d-flex">
               <Form.Control size="lg"
                 type="search"
@@ -31,12 +32,11 @@ export const Navigation = () => {
               />
               <Button variant="outline-primary">Buscar</Button>
             </Form>
-            <Navbar.Text>Hola: 
-            <NavDropdown title={auth} id="navbarScrollingDropdown">
+            </div>
+            <NavDropdown title={`Hola: ${auth}`} id="navbarScrollingDropdown" style={{paddingLeft: '4rem'}}>
                 <NavDropdown.Item href="/dashboard/logout">Cerrar sesión
                 </NavDropdown.Item>
               </NavDropdown>
-            </Navbar.Text>
           </Navbar.Collapse>
         </Container>
       </Navbar>
