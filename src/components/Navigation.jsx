@@ -26,7 +26,7 @@ export const Navigation = () => {
             <Form className="d-flex">
               <Form.Control size="lg"
                 type="search"
-                placeholder="Buscar"
+                placeholder="Buscar archivo"
                 className="me-2"
                 aria-label="Search"
               />
