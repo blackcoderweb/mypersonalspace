@@ -1,44 +1,32 @@
-import { useState } from 'react';
-import Button from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form';
-import Modal from 'react-bootstrap/Modal';
-import { fileSystem } from '../data/testData';
-import { v4 as uuidv4 } from 'uuid';
+import { useState } from "react";
+import Button from "react-bootstrap/Button";
+import Form from "react-bootstrap/Form";
+import Modal from "react-bootstrap/Modal";
+import { useDispatch, useSelector } from "react-redux";
+import { createFolder } from "../features/fileSystem/fileSystemSlice";
 
 export const AddModal = () => {
-
+  const { fileSystemItems } = useSelector((store) => store.fileSystem);
+  const dispatch = useDispatch();
   const [show, setShow] = useState(false);
   const [folderName, setFolderName] = useState("");
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  const createFolder = () => {
-    localStorage.setItem('root', JSON.stringify(fileSystem))
-    const folder = {
-      id: uuidv4(),
-      name: folderName,
-      files: [],
-      folders: []
-    };
-    //Si no se pone nombre a la carpeta
-    if(folderName == "") folder.name = "Nueva carpeta"
-    const myFolders = JSON.parse(localStorage.getItem('root'))
-    const parentFolder = myFolders.root.unidad
-    parentFolder.folders.push(folder);
-    localStorage.setItem('root', JSON.stringify(myFolders));
+  const handleCreateFolder = () => {
+    dispatch(createFolder({ folderName }));
     setShow(false);
-  }
+  };
 
   return (
     <>
-      <Button variant="primary" style={{width: '10rem'}} onClick={handleShow}>
+      <Button variant="primary" style={{ width: "10rem" }} onClick={handleShow}>
         Nuevo
       </Button>
-
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Nueva carpeta {JSON.stringify(fileSystem)}</Modal.Title>
+          <Modal.Title>Nueva carpeta {JSON.stringify(fileSystemItems)}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form>
@@ -58,11 +46,11 @@ export const AddModal = () => {
           <Button variant="secondary" onClick={handleClose}>
             Cancelar
           </Button>
-          <Button variant="primary" onClick={createFolder}>
+          <Button variant="primary" onClick={handleCreateFolder}>
             Crear
           </Button>
         </Modal.Footer>
       </Modal>
     </>
-  )
-}
+  );
+};

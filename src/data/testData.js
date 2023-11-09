@@ -25,12 +25,3 @@ export const users = [
             "pass":"demo4",
           }
 ]
-
-export const fileSystem = {
-  root: {
-    unidad: {
-      folders: [],
-      files: []
-    }
-  }
-};

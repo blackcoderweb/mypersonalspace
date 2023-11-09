@@ -20,20 +20,20 @@ export const UploadModal = () => {
           <Modal.Title>Subir archivo</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-        <Form>
-          <Form.Group controlId="formFileMultiple" className="mb-3">
-            <Form.Label>Seleccione el archivo</Form.Label>
-            <Form.Control type="file"/>
-          </Form.Group>
-        </Form>
-        <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-              <Form.Label>Ingrese las etiquetas separadas por coma</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Ej: factura cliente, ventas enero"
-                autoFocus
-              />
+          <Form>
+            <Form.Group controlId="formFileMultiple" className="mb-3">
+              <Form.Label>Seleccione el archivo</Form.Label>
+              <Form.Control type="file" />
             </Form.Group>
+          </Form>
+          <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+            <Form.Label>Ingrese las etiquetas separadas por coma</Form.Label>
+            <Form.Control
+              type="text"
+              placeholder="Ej: factura cliente, ventas enero"
+              autoFocus
+            />
+          </Form.Group>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleClose}>
