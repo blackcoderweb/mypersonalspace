@@ -26,4 +26,11 @@ export const users = [
           }
 ]
 
-export const fileSystem = [];
+export const fileSystem = {
+  root: {
+    unidad: {
+      folders: [],
+      files: []
+    }
+  }
+};

@@ -23,7 +23,7 @@ export const UploadModal = () => {
         <Form>
           <Form.Group controlId="formFileMultiple" className="mb-3">
             <Form.Label>Seleccione el archivo</Form.Label>
-            <Form.Control type="file" single />
+            <Form.Control type="file"/>
           </Form.Group>
         </Form>
         <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">

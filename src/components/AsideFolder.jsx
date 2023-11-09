@@ -1,6 +1,6 @@
 import Card from "react-bootstrap/Card";
 
-export const AsideFolder = () => {
+export const AsideFolder = ({folder}) => {
   return (
     <Card
       onClick={() => {
@@ -10,7 +10,7 @@ export const AsideFolder = () => {
       <Card.Body
         style={{ height: "2.5rem", display: "flex", alignItems: "center" }}
       >
-        Hola
+        {folder.name}
       </Card.Body>
     </Card>
   );
