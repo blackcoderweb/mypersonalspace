@@ -3,7 +3,7 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
 import { useDispatch, useSelector } from "react-redux";
-import { createFolder } from "../features/fileSystem/fileSystemSlice";
+import { createFolder } from "../features/fileSystem/fileSystemSlice"; 
 
 export const AddModal = () => {
   const { fileSystemItems } = useSelector((store) => store.fileSystem);
@@ -26,7 +26,7 @@ export const AddModal = () => {
       </Button>
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Nueva carpeta {JSON.stringify(fileSystemItems)}</Modal.Title>
+          <Modal.Title>Nueva carpeta</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form>

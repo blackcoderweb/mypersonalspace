@@ -10,24 +10,28 @@ const initialState = {
       },
     },
   },
+  expanded: false,
 };
 
 const fileSystemSlice = createSlice({
-    name: "fileSystem",
-    initialState,
-    reducers: {
-      createFolder: (state, action) => {
-        const { folderName } = action.payload;
-        const folder = {
-          id: uuidv4(),
-          name: folderName || "Nueva Carpeta",
-          files: [],
-          folders: [],
-        };
-        state.fileSystemItems.root.unidad.folders.push(folder);
-      },
+  name: "fileSystem",
+  initialState,
+  reducers: {
+    createFolder: (state, action) => {
+      const { folderName } = action.payload;
+      const folder = {
+        id: uuidv4(),
+        name: folderName || "Nueva Carpeta",
+        files: [],
+        folders: [],
+      };
+      state.fileSystemItems.root.unidad.folders.push(folder);
     },
-  });
-  
-  export const { createFolder } = fileSystemSlice.actions;
-  export default fileSystemSlice.reducer;
+    getFolders: (state) => {
+      return state.fileSystemItems.root.unidad.folders;
+    },
+  },
+});
+
+export const { createFolder, getFolders } = fileSystemSlice.actions;
+export default fileSystemSlice.reducer;
