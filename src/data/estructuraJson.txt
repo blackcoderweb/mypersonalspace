@@ -18,3 +18,39 @@ root: {
 	]
   }
 }
+
+
+{
+  "root": {
+    "unidad": {
+      "folders": [
+        {
+          "id": "folder1",
+          "name": "Folder 1",
+          "files": [],
+          "folders": []
+        },
+        {
+          "id": "folder2",
+          "name": "Folder 2",
+          "files": [],
+          "folders": []
+        }
+      ],
+      "files": [
+        {
+          "id": "file1",
+          "name": "File 1",
+          "url": "https://example.com/file1",
+          "tags": ["tag1", "tag2"]
+        },
+        {
+          "id": "file2",
+          "name": "File 2",
+          "url": "https://example.com/file2",
+          "tags": ["tag3", "tag4"]
+        }
+      ]
+    }
+  }
+}

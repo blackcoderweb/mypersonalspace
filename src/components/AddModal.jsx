@@ -6,8 +6,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { createFolder } from "../features/fileSystem/fileSystemSlice"; 
 
 export const AddModal = () => {
-  const { fileSystemItems } = useSelector((store) => store.fileSystem);
+  
   const dispatch = useDispatch();
+  const parentFolder = useSelector((state) => state.fileSystem.parentFolder);
   const [show, setShow] = useState(false);
   const [folderName, setFolderName] = useState("");
 
@@ -15,7 +16,7 @@ export const AddModal = () => {
   const handleShow = () => setShow(true);
 
   const handleCreateFolder = () => {
-    dispatch(createFolder({ folderName }));
+    dispatch(createFolder({ folderName, parentFolder }));
     setShow(false);
   };
 

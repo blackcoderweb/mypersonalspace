@@ -15,7 +15,7 @@ export const MainNode = () => {
         display: "flex",
         flexDirection: "row",
         alignItems: "center",
-        paddingLeft: "2rem",
+        paddingLeft: "1rem",
       }}
     >
       <i

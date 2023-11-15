@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Card from "react-bootstrap/Card";
+import PropTypes from "prop-types";
 
 export const FolderNode = ({folder}) => {
 
@@ -15,7 +15,7 @@ export const FolderNode = ({folder}) => {
         display: "flex",
         flexDirection: "row",
         alignItems: "center",
-        paddingLeft: "2rem",
+        paddingLeft: "0.5rem",
         paddingBottom: '0.5rem'
       }}
     >
@@ -27,3 +27,7 @@ export const FolderNode = ({folder}) => {
     </div>
   );
 };
+
+FolderNode.propTypes = {
+  folder: PropTypes.object
+}
