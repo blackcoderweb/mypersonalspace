@@ -11,7 +11,7 @@ const initialState = {
       },
     },
   },
-  parentFolder: null,
+  parentFolder: "root.unidad",
 };
 
 const fileSystemSlice = createSlice({
@@ -30,7 +30,7 @@ const fileSystemSlice = createSlice({
         "folders": [],
       };
       //Cuando quiero crear una carpeta en la unidad principal
-      if (parentFolder == null) {
+      if (parentFolder == "root.unidad") {
         let folders = state.fileSystemItems.root.unidad.folders
         if (folders.length == 0) {
           state.fileSystemItems.root.unidad.folders.push(folder);
@@ -50,8 +50,12 @@ const fileSystemSlice = createSlice({
       }
       
     },
+    updateParentFolder: (state, action) => {
+      const { parentFolder } = action.payload;
+      state.parentFolder = parentFolder;
+    },
   },
 });
 
-export const { createFolder } = fileSystemSlice.actions;
+export const { createFolder, updateParentFolder } = fileSystemSlice.actions;
 export default fileSystemSlice.reducer;

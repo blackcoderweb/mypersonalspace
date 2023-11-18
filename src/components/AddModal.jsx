@@ -22,7 +22,7 @@ export const AddModal = () => {
 
   return (
     <>
-      <Button variant="primary" style={{ width: "10rem" }} onClick={handleShow}>
+      <Button className="bg-primary bg-gradient" style={{ width: "10rem" }} onClick={handleShow}>
         Nuevo
       </Button>
       <Modal show={show} onHide={handleClose}>

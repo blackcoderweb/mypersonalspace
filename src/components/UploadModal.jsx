@@ -11,7 +11,7 @@ export const UploadModal = () => {
 
   return (
     <>
-      <Button variant="primary" style={{ width: "10rem" }} onClick={handleShow}>
+      <Button className="bg-primary bg-gradient" style={{ width: "10rem" }} onClick={handleShow}>
         Subir
       </Button>
 

@@ -4,5 +4,9 @@ body {
   align-items: center;
   min-width: 320px;
   min-height: 100vh;
-  background-color: whitesmoke;
+  background-color: #f8f9fa;
+}
+
+.search-input{
+  background-color:#f8f9fa;
 }
