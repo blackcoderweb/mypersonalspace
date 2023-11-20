@@ -11,8 +11,12 @@ export const UploadModal = () => {
 
   return (
     <>
-      <Button className="bg-primary bg-gradient" style={{ width: "10rem" }} onClick={handleShow}>
-        Subir
+      <Button
+        className="bg-primary bg-gradient"
+        style={{ width: "10rem" }}
+        onClick={handleShow}
+      >
+        <i className="fa-solid fa-file-arrow-up"></i> Subir
       </Button>
 
       <Modal show={show} onHide={handleClose}>

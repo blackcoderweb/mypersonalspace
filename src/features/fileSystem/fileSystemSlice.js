@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { v4 as uuidv4 } from "uuid";
 import { existingName } from "../../helpers/existingName";
+import { JSONPath } from "jsonpath-plus";
 
 const initialState = {
   fileSystemItems: {
@@ -42,13 +43,19 @@ const fileSystemSlice = createSlice({
           }
         }
       }else{
-        //Si la carpeta que voy a crear tiene padre
-        //Buscar el padre de la carpeta en el JSON(Usar jsonpath-plus)
-        //Si no hay ninguna carpeta creada insertar la primera carpeta
-        //Si ya hay carpetas, evitar que la nueva carpeta no tenga el nombre de alguna carpeta existente
-        console.log("La carpeta raíz no es su padre");
+        //Cuando quiero crear una carpeta en una carpeta que no es la unidad principal, busco su padre por el id usando jsonpath-plus
+        let parent = JSONPath({ path: `$..folders[?(@.id=='${parentFolder}')]`, json: state.fileSystemItems });
+        //Si el padre existe, busco si ya existe una carpeta con el mismo nombre
+        if(parent.length > 0){
+          if(existingName(parent[0].folders, folderName)){
+            alert("Ya existe una carpeta con este nombre en esta ubicación");
+          }else{
+            parent[0].folders.push(folder);
+          }
+      }else{
+        alert("No se pudo crear la carpeta");
       }
-      
+      }
     },
     updateParentFolder: (state, action) => {
       const { parentFolder } = action.payload;

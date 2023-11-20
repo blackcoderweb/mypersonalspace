@@ -22,7 +22,7 @@ export const Navigation = () => {
             >
             </Nav>
             <div style={{ width: '100%',display: 'flex', justifyContent:'center', alignItems: 'center' }}>
-            <Form className="d-flex" style={{width: '41rem'}}>
+            <Form className="d-flex" style={{width: '80%'}}>
               <Form.Control size="lg"
                 type="search"
                 placeholder="Buscar archivo o carpeta"

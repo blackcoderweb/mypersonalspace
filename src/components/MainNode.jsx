@@ -1,24 +1,27 @@
 import { useState } from "react";
 import Card from "react-bootstrap/Card";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { updateParentFolder } from "../features/fileSystem/fileSystemSlice";
-import { Navigate, useNavigate } from "react-router-dom";
+import { FolderNode } from "./FolderNode";
 
 export const MainNode = () => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const [expanded, setExpanded] = useState();
+  const [expanded, setExpanded] = useState(false);
+  const folders = useSelector((state) => state.fileSystem.fileSystemItems.root.unidad.folders);
 
   const handleUpdateParent = () => {
     dispatch(updateParentFolder({parentFolder: "root.unidad"}));
-    navigate("/dashboard/elements")
   };
 
   const handleExpand = () => {
-    expanded ? setExpanded(false) : setExpanded(true);
+    
+      //When expanded, log the folders.
+      //When collapsed, hide the folders.
+      expanded ? setExpanded(false) : setExpanded(true);
   };
 
   return (
+    <>
     <div
       style={{
         display: "flex",
@@ -39,5 +42,7 @@ export const MainNode = () => {
         <i className="fa-solid fa-hard-drive fa-xl"></i> Mi unidad
       </Card.Body>
     </div>
+    {expanded && folders.length > 0 && folders.map((folder) => <FolderNode key={folder.id} folder={folder} />)}
+    </>
   );
 };
