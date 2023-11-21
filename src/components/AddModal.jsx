@@ -16,11 +16,11 @@ export const AddModal = () => {
 
   const handleSubmitCreateFolder = (e) => {
     e.preventDefault();
-    dispatch(createFolder({ folderName, parentFolder }));
+    dispatch(createFolder({ folderName, parentFolder, ext: false }));
     setShow(false);
-  }
+  };
   const handleCreateFolder = () => {
-    dispatch(createFolder({ folderName, parentFolder }));
+    dispatch(createFolder({ folderName, parentFolder, ext: false }));
     setShow(false);
   };
 
