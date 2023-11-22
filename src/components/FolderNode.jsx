@@ -10,7 +10,8 @@ export const FolderNode = ({ folder }) => {
   const folders = useSelector((state) => state.fileSystem.fileSystemItems.root.unidad);
   const [children, setChildren] = useState([]);
 
-  const handleExpand = (parentId) => {
+  const handleUpdateParent = (parentId) => {
+    dispatch(updateParentFolder({ parentFolder: parentId }));
     //Buscar la carpeta con el id parentId
     let parent = JSONPath({  path: `$..folders[?(@.id=='${parentId}')]`, json: folders });
     //Guardar los hijos de la carpeta
@@ -18,10 +19,6 @@ export const FolderNode = ({ folder }) => {
     //When expanded, log the folders.
     //When collapsed, hide the folders.
     expanded ? setExpanded(false) : setExpanded(true);
-  };
-
-  const handleUpdateParent = (parentId) => {
-    dispatch(updateParentFolder({ parentFolder: parentId }));
   };
 
   return (
@@ -34,21 +31,23 @@ export const FolderNode = ({ folder }) => {
         paddingLeft: "0.5rem",
         paddingBottom: "0.5rem",
       }}
+      onClick={() => handleUpdateParent(folder.id)}
     >
-      <i
+      <div
+        style={{ userSelect: "none", paddingLeft: "1.5rem" }}
+      >
+              <i
         className={
           expanded
             ? "fa-solid fa-chevron-down fa-xs"
             : "fa-solid fa-chevron-right fa-xs"
         }
-        style={{ paddingLeft: "1rem" }}
-        onClick={() => handleExpand(folder.id)}
       ></i>
-      <div
-        style={{ userSelect: "none", paddingLeft: "1rem" }}
-        onClick={() => handleUpdateParent(folder.id)}
-      >
-        <i className="fa-solid fa-folder fa-xl"></i> {folder.name}
+        <i className={
+          expanded
+            ? "fa-solid fa-folder-open fa-xl"
+            : "fa-solid fa-folder fa-xl"
+        } style={{ paddingLeft: "0.5rem", paddingRight: "0.5rem" }}></i>{folder.name}
       </div>
     </div>
     <div style={{paddingLeft: '1rem'}}>
