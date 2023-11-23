@@ -4,7 +4,7 @@ export const Aside = () => {
   
   
   return (
-    <div style={{ width: "20rem", height: '90vh'}}>
+    <div id='aside' style={{ width: "20rem", height: '90vh'}}>
       <MainNode />
     </div>
   );

@@ -1,15 +1,15 @@
 import { useState } from "react";
 import Card from "react-bootstrap/Card";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { updateParentFolder } from "../features/fileSystem/fileSystemSlice";
 import { FolderNode } from "./FolderNode";
+import { useFindChildren } from "../hooks/useFindChildren";
 
 export const MainNode = () => {
   const dispatch = useDispatch();
   const [expanded, setExpanded] = useState(false);
-  const folders = useSelector(
-    (state) => state.fileSystem.fileSystemItems.root.unidad.folders
-  );
+  
+  const {folders} = useFindChildren("root.unidad");
 
   const handleUpdateParent = () => {
     dispatch(updateParentFolder({ parentFolder: "root.unidad" }));

@@ -3,23 +3,18 @@ import { AddModal } from "./AddModal";
 import { UploadModal } from "./UploadModal";
 import { Row, Col } from "react-bootstrap";
 import { Folder } from "./Folder";
-import { useDispatch, useSelector } from "react-redux";
-import { findChildren } from "../features/fileSystem/fileSystemSlice";
-import { useEffect } from "react";
+import { useSelector } from "react-redux";
 import { FileItem } from "./FileItem";
+import { useFindChildren } from "../hooks/useFindChildren";
 
 export const Hero = () => {
+
   const parentFolder = useSelector((state) => state.fileSystem.parentFolder);
-  const dispatch = useDispatch();
-
-  const { folders, files } = useSelector((state) => state.fileSystem);
-
-  useEffect(() => {
-    dispatch(findChildren({ parentFolder }));
-  }, [parentFolder, dispatch]);
+  const {folders, files} = useFindChildren(parentFolder)
 
   return (
     <Card
+      id="hero"
       className="bg-light"
       border="light"
       style={{
@@ -37,15 +32,15 @@ export const Hero = () => {
         </Col>
       </Row>
 
-      <section className="pt-5" style={{ width: "95%" }}>
-        <h5>Folders</h5>
+      <section id="folders-files" className="pt-5" style={{ width: "95%" }}>
+        <h5>Carpetas</h5>
         <hr />
         <Row xs={1} md={4} className="g-2 justify-content-md-center">
           {folders && folders.map((folder) => (
             <Folder key={folder.id} folder={folder} />
           ))}
         </Row>
-        <h5 className="pt-5">Files</h5>
+        <h5 className="pt-5">Archivos</h5>
         <hr />
         <Row xs={1} md={4} className="g-2 justify-content-md-center">
           {files && files.map((file) => (

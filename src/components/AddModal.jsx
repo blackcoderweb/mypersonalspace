@@ -4,7 +4,7 @@ import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  createFolder,
+  createFolder, updateParentFolder,
 } from "../features/fileSystem/fileSystemSlice";
 
 export const AddModal = () => {
@@ -19,10 +19,12 @@ export const AddModal = () => {
   const handleSubmitCreateFolder = (e) => {
     e.preventDefault();
     dispatch(createFolder({ folderName, parentFolder, ext: false }));
+    dispatch(updateParentFolder({parentFolder: parentFolder}));
     setShow(false);
   };
   const handleCreateFolder = () => {
     dispatch(createFolder({ folderName, parentFolder, ext: false }));
+    dispatch(updateParentFolder({parentFolder: parentFolder}));
     setShow(false);
   };
 

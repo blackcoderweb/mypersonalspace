@@ -10,3 +10,13 @@ body {
 .search-input{
   background-color:#f8f9fa;
 }
+
+@media (max-width: 700px) {
+  #aside {
+    display: none;  
+  }
+  #hero {
+    width: 100% !important;
+  }
+  
+}

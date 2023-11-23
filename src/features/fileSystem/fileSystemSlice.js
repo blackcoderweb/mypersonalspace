@@ -99,34 +99,13 @@ const fileSystemSlice = createSlice({
         }
       }
     },
-    findChildren: (state, action) => {
-      let {parentFolder} = action.payload;
-      //Cuando quiero listar los hijos de la unidad principal
-      if (parentFolder == "root.unidad") {
-        state.files = state.fileSystemItems.root.unidad.files;
-        state.folders = state.fileSystemItems.root.unidad.folders;
-      } else {
-        //Cuando quiero listar los hijos de una carpeta que no es la unidad principal, busco su padre por el id usando jsonpath-plus
-        let parent = JSONPath({
-          path: `$..folders[?(@.id=='${parentFolder}')]`,
-          json: state.fileSystemItems,
-        });
-        //Si el padre existe, devuelvo sus hijos
-        if (parent.length > 0) {
-          state.files = parent[0].files;
-          state.folders = parent[0].folders;
-        } else {
-          alert("No se pudo listar los hijos");
-        }
-      }
-    },
     updateParentFolder: (state, action) => {
-      const { parentFolder } = action.payload;
+      let { parentFolder } = action.payload;
       state.parentFolder = parentFolder;
     },
   },
 });
 
-export const { createFolder, uploadFile, updateParentFolder, findChildren } =
+export const { createFolder, uploadFile, updateParentFolder } =
   fileSystemSlice.actions;
 export default fileSystemSlice.reducer;

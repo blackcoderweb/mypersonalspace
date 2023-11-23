@@ -3,7 +3,7 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
 import { useDispatch, useSelector } from "react-redux";
-import { uploadFile } from "../features/fileSystem/fileSystemSlice";
+import { updateParentFolder, uploadFile } from "../features/fileSystem/fileSystemSlice";
 
 export const UploadModal = () => {
   const [show, setShow] = useState(false);
@@ -21,6 +21,7 @@ export const UploadModal = () => {
   const handleUploadFile = () => {
     if (selectedFile) {
       dispatch(uploadFile({ selectedFile, fileUrl, tags, parentFolder, ext: true }));
+      dispatch(updateParentFolder({parentFolder: parentFolder}));
       setShow(false);
       setSelectedFile("");
     }
