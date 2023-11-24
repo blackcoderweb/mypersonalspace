@@ -1,8 +1,9 @@
+import PropTypes from "prop-types";
 import Card from "react-bootstrap/Card";
 
 export const Folder = ({ folder }) => {
   return (
-    <Card className="text-center" border="light" style={{ width: "12rem", margin: '1rem' }}>
+    <Card id="folderItem" className="text-center" border="light" style={{ width: "12rem", margin: '1rem' }}>
       <Card.Img
         style={{ width: "4rem" }}
         variant="top"
@@ -15,4 +16,8 @@ export const Folder = ({ folder }) => {
       </Card.Body>
     </Card>
   );
+};
+
+Folder.propTypes = {
+  folder: PropTypes.object,
 };

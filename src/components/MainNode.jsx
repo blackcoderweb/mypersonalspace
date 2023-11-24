@@ -8,6 +8,7 @@ import { useFindChildren } from "../hooks/useFindChildren";
 export const MainNode = () => {
   const dispatch = useDispatch();
   const [expanded, setExpanded] = useState(false);
+  const [selectedFolder, setSelectedFolder] = useState("root.unidad");
   
   const {folders} = useFindChildren("root.unidad");
 
@@ -16,11 +17,13 @@ export const MainNode = () => {
     //When expanded, log the folders.
     //When collapsed, hide the folders.
     expanded ? setExpanded(false) : setExpanded(true);
+    setSelectedFolder("root.unidad");
   };
 
   return (
     <>
-      <div
+      <div id="mainNode"
+      className={selectedFolder === "root.unidad" ? "selected" : ""}
         style={{
           display: "flex",
           flexDirection: "row",
@@ -42,7 +45,7 @@ export const MainNode = () => {
       </div>
       {expanded &&
         folders.length > 0 &&
-        folders.map((folder) => <FolderNode key={folder.id} folder={folder} />)}
+        folders.map((folder) => <FolderNode key={folder.id} folder={folder} setSelectedFolder={setSelectedFolder} selectedFolder={selectedFolder}/>)}
     </>
   );
 };

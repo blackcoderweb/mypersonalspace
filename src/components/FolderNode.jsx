@@ -4,20 +4,22 @@ import { useDispatch } from "react-redux";
 import { updateParentFolder } from "../features/fileSystem/fileSystemSlice";
 import { useFindChildren } from "../hooks/useFindChildren";
 
-export const FolderNode = ({ folder }) => {
+export const FolderNode = ({ folder, setSelectedFolder, selectedFolder }) => {
   const dispatch = useDispatch();
   const [expanded, setExpanded] = useState(false);
 
   const handleUpdateParent = (parentId) => {
     dispatch(updateParentFolder({ parentFolder: parentId }));
     setExpanded((prevExpanded) => !prevExpanded);
+    setSelectedFolder(folder.id);
   };
 
   const { folders } = useFindChildren(folder.id);
 
   return (
     <>
-      <div
+      <div id="folderNode"
+      className={selectedFolder === folder.id ? "selected" : ""}
         style={{
           display: "flex",
           flexDirection: "row",
@@ -50,7 +52,7 @@ export const FolderNode = ({ folder }) => {
         {expanded &&
           folders.length > 0 &&
           folders.map((folder) => (
-            <FolderNode key={folder.id} folder={folder} />
+            <FolderNode key={folder.id} folder={folder} setSelectedFolder={setSelectedFolder} selectedFolder={selectedFolder} />
           ))}
       </div>
     </>
@@ -59,4 +61,6 @@ export const FolderNode = ({ folder }) => {
 
 FolderNode.propTypes = {
   folder: PropTypes.object,
+  setSelectedFolder: PropTypes.func,
+  selectedFolder: PropTypes.string,
 };
