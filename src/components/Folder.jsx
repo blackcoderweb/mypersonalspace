@@ -1,5 +1,6 @@
 import PropTypes from "prop-types";
 import Card from "react-bootstrap/Card";
+import { OptionsMenu } from "./OptionsMenu";
 
 export const Folder = ({ folder }) => {
   return (
@@ -10,8 +11,8 @@ export const Folder = ({ folder }) => {
         src="/images/folder.png"
       />
       <Card.Body>
-        <Card.Title as="p" className="text-center">
-          {folder.name}
+        <Card.Title as="div" className="text-center d-flex align-items-center">
+          {folder.name}<OptionsMenu />
         </Card.Title>
       </Card.Body>
     </Card>

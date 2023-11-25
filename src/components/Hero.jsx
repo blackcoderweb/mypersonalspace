@@ -31,7 +31,6 @@ export const Hero = () => {
           <UploadModal />
         </Col>
       </Row>
-
       <section id="folders-files" className="pt-5" style={{ width: "95%" }}>
         <h5>Carpetas</h5>
         <hr />

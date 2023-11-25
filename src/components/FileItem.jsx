@@ -1,5 +1,6 @@
 import PropTypes from "prop-types";
 import Card from "react-bootstrap/Card";
+import { OptionsMenu } from "./OptionsMenu";
 
 export const FileItem = ({ file }) => {
   return (
@@ -10,8 +11,8 @@ export const FileItem = ({ file }) => {
         src="/images/file.png"
       />
       <Card.Body>
-        <Card.Title as="p" className="text-center">
-          {file.name}
+        <Card.Title as="div" className="text-center d-flex align-items-center">
+          {file.name}<OptionsMenu />
         </Card.Title>
       </Card.Body>
     </Card>
