@@ -27,6 +27,7 @@ const fileSystemSlice = createSlice({
       const folder = {
         id: uuidv4(),
         name: folderName,
+        share: [],
         files: [],
         folders: [],
       };
@@ -65,8 +66,15 @@ const fileSystemSlice = createSlice({
       let file = {
         id: uuidv4(),
         name: selectedFile,
-        url: fileUrl,
-        tags: tags,
+        version: [
+          {
+            id: uuidv4(),
+            url: fileUrl,
+            name: selectedFile,
+            tags: tags		
+          }
+          ],
+          share: []		
       };
 
       //Cuando quiero subir un archivo a la unidad principal
@@ -74,6 +82,7 @@ const fileSystemSlice = createSlice({
         let files = state.fileSystemItems.root.unidad.files;
         if (files.length == 0) {
           state.fileSystemItems.root.unidad.files.push(file);
+          console.log(files)
         } else {
           if (existingName(files, selectedFile, ext)) {
             alert("Ya existe un archivo con este nombre en esta ubicación");

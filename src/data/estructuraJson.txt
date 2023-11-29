@@ -1,56 +1,35 @@
 root: {
-  unidad: {
-	folders: [
-          {
+      unidad: {
+        folders: [
+	  {
 		id: string,
 		name: string
-		files: Files[]
-		folders: Folders[]
-  	  }		
-        ],
-	files: [
-	    {
-		id: string
-		name: string
-		url: string
-		tags: string[]
-	    }
-	]
-  }
-}
-
-
-{
-  "root": {
-    "unidad": {
-      "folders": [
-        {
-          "id": "folder1",
-          "name": "Folder 1",
-          "files": [],
-          "folders": []
-        },
-        {
-          "id": "folder2",
-          "name": "Folder 2",
-          "files": [],
-          "folders": []
-        }
-      ],
-      "files": [
-        {
-          "id": "file1",
-          "name": "File 1",
-          "url": "https://example.com/file1",
-          "tags": ["tag1", "tag2"]
-        },
-        {
-          "id": "file2",
-          "name": "File 2",
-          "url": "https://example.com/file2",
-          "tags": ["tag3", "tag4"]
-        }
-      ]
+		share: [
+			{
+				user: string
+  	                        permissions: string (puede ser lectura o escritura)		
+			}			    
+		]
+	  }
+	],
+        files: [
+		{
+		  id: string,
+                  version: [
+			{
+			  id: string,
+			  url: string,
+			  name: string,
+			  tags: string		
+			}
+		  ],
+		  share: [
+			{
+				user: string
+  	                        permissions: string (puede ser lectura o escritura)		
+			}			    
+		  ]			
+		}
+	],
+      },
     }
-  }
-}

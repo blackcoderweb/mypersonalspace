@@ -10,7 +10,7 @@ export const Navigation = () => {
   const {auth} = useAuth()
 
   return (
-      <Navbar expand="lg" className="bg-primary bg-gradient text-light" style={{ height: '10vh'}}>
+      <Navbar id="navbar" expand="lg" className="bg-primary bg-gradient text-light" style={{ height: '10vh'}}>
         <Container fluid>
           <Navbar.Brand className="text-light">My personal space</Navbar.Brand>
           <Navbar.Toggle aria-controls="navbarScroll" />

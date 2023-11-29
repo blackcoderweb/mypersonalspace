@@ -1,5 +1,5 @@
 import Card from "react-bootstrap/Card";
-import { AddModal } from "./AddModal";
+import { AddModal } from "./FolderModal";
 import { UploadModal } from "./UploadModal";
 import { Row, Col } from "react-bootstrap";
 import { Folder } from "./Folder";
@@ -25,7 +25,7 @@ export const Hero = () => {
     >
       <Row className="d-flex gap-1 pt-4">
         <Col xm={6}>
-          <AddModal />
+          <AddModal action="create" title="Nueva carpeta" label="Nombre" buttonText="Crear"/>
         </Col>
         <Col xm={6}>
           <UploadModal />
