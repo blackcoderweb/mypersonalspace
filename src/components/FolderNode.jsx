@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import { updateParentFolder } from "../features/fileSystem/fileSystemSlice";
 import { useFindChildren } from "../hooks/useFindChildren";
 
-export const FolderNode = ({ folder, setSelectedFolder, selectedFolder }) => {
+export const FolderNode = ({ folder, setSelectedFolder, selectedFolder, level = 1 }) => {
   const dispatch = useDispatch();
   const [expanded, setExpanded] = useState(false);
 
@@ -18,18 +18,18 @@ export const FolderNode = ({ folder, setSelectedFolder, selectedFolder }) => {
 
   return (
     <>
-      <div id="folderNode"
-      className={selectedFolder === folder.id ? "selected" : ""}
+      <div
+        id="folderNode"
+        className={selectedFolder === folder.id ? "selected" : ""}
         style={{
           display: "flex",
           flexDirection: "row",
           alignItems: "center",
-          paddingLeft: "0.5rem",
           paddingBottom: "0.5rem",
         }}
         onClick={() => handleUpdateParent(folder.id)}
       >
-        <div style={{ userSelect: "none", paddingLeft: "1.5rem" }}>
+        <div style={{ userSelect: "none", marginLeft: `${level * 2.5}rem` }}>
           <i
             className={
               expanded
@@ -43,18 +43,22 @@ export const FolderNode = ({ folder, setSelectedFolder, selectedFolder }) => {
                 ? "fa-solid fa-folder-open fa-xl"
                 : "fa-solid fa-folder fa-xl"
             }
-            style={{ paddingLeft: "0.5rem", paddingRight: "0.5rem" }}
+            style={{ marginLeft: "0.5rem", marginRight: "0.5rem" }}
           ></i>
           {folder.name}
         </div>
       </div>
-      <div style={{ paddingLeft: "1rem" }}>
-        {expanded &&
-          folders.length > 0 &&
-          folders.map((folder) => (
-            <FolderNode key={folder.id} folder={folder} setSelectedFolder={setSelectedFolder} selectedFolder={selectedFolder} />
-          ))}
-      </div>
+      {expanded &&
+        folders.length > 0 &&
+        folders.map((folder) => (
+          <FolderNode
+            key={folder.id}
+            folder={folder}
+            setSelectedFolder={setSelectedFolder}
+            selectedFolder={selectedFolder}
+            level={level + 0.8}
+          />
+        ))}
     </>
   );
 };

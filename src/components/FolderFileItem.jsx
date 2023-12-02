@@ -2,12 +2,12 @@ import PropTypes from "prop-types";
 import Card from "react-bootstrap/Card";
 import { OptionsMenu } from "./OptionsMenu";
 
-export const FolderFileItem = ({ item, imageSrc }) => {
+export const FolderFileItem = ({ type, item, imageSrc }) => {
   return (
     <Card
-  id="folderItem"
+  id="folderFileItem"
   border="light"
-  style={{ width: "12rem", height:"14rem", margin: "1rem" }}
+  style={{ width: "12rem", height:"12rem", margin: "1rem" }}
 >
   <div className="d-flex justify-content-between align-items-center"
   style={{
@@ -23,11 +23,11 @@ export const FolderFileItem = ({ item, imageSrc }) => {
       {item.name}
     </div>
     <div>
-      <OptionsMenu type="carpeta" name={item.name}/>
+      <OptionsMenu type={type} name={item.name}/>
     </div>
   </div>
   <Card.Img
-        style={{ width: "12rem" }}
+        style={{ width: "10rem" }}
         variant="top"
         src={imageSrc}
       />
@@ -37,5 +37,6 @@ export const FolderFileItem = ({ item, imageSrc }) => {
 
 FolderFileItem.propTypes = {
   item: PropTypes.object,
-  imageSrc: PropTypes.string
+  imageSrc: PropTypes.string,
+  type: PropTypes.string,
 };

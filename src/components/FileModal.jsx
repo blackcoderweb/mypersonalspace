@@ -3,9 +3,13 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
 import { useDispatch, useSelector } from "react-redux";
-import { updateParentFolder, uploadFile } from "../features/fileSystem/fileSystemSlice";
+import {
+  updateParentFolder,
+  uploadFile,
+} from "../features/fileSystem/fileSystemSlice";
+import PropTypes from "prop-types";
 
-export const UploadModal = () => {
+export const FileModal = ({ action, title, label }) => {
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
@@ -20,31 +24,44 @@ export const UploadModal = () => {
 
   const handleUploadFile = () => {
     if (selectedFile) {
-      dispatch(uploadFile({ selectedFile, fileUrl, tags, parentFolder, ext: true }));
-      dispatch(updateParentFolder({parentFolder: parentFolder}));
+      dispatch(
+        uploadFile({ selectedFile, fileUrl, tags, parentFolder, ext: true })
+      );
+      dispatch(updateParentFolder({ parentFolder: parentFolder }));
       setShow(false);
       setSelectedFile("");
     }
-  }
+  };
+
+  const handleUpdateFile = () => {
+    alert("Voy a actualizar el archivo");
+  };
 
   return (
     <>
-      <Button
-        className="bg-primary bg-gradient"
-        style={{ width: "10rem" }}
-        onClick={handleShow}
-      >
-        <i className="fa-solid fa-file-arrow-up"></i> Subir
-      </Button>
+      {action === "upload" ? (
+        <Button
+          style={{ width: "10rem" }}
+          onClick={handleShow}
+        >
+          <i className="fa-solid fa-file-arrow-up"></i> Subir archivo
+        </Button>
+      ) : (
+        <div onClick={handleShow}>
+          <i className="fa-solid fa-file-pen"></i> Actualizar
+        </div>
+      )}
 
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Subir archivo</Modal.Title>
+          <Modal.Title>
+            <h5>{title}</h5>
+          </Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form>
             <Form.Group controlId="formFileMultiple" className="mb-3">
-              <Form.Label>Seleccione el archivo</Form.Label>
+              <Form.Label>{label}</Form.Label>
               <Form.Control
                 type="file"
                 onChange={(e) => {
@@ -71,11 +88,20 @@ export const UploadModal = () => {
           <Button variant="secondary" onClick={handleClose}>
             Cancelar
           </Button>
-          <Button variant="primary" onClick={handleUploadFile}>
+          <Button
+            variant="primary"
+            onClick={action === "upload" ? handleUploadFile : handleUpdateFile}
+          >
             Aceptar
           </Button>
         </Modal.Footer>
       </Modal>
     </>
   );
+};
+
+FileModal.propTypes = {
+  action: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
+  label: PropTypes.string.isRequired,
 };

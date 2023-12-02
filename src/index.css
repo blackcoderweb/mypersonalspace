@@ -6,28 +6,69 @@ body {
   min-height: 100vh;
   background-color: #f8f9fa;
 }
+
+#navbar{
+  background-color: #f8f9fa;
+  box-shadow: 0 0 10px rgba(0,0,0,0.2);
+  padding: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  z-index: 2;
+}
+
+#navbar .logo {
+  font-size: 20px;
+  font-weight: 700;
+  color: #000;
+  padding: 10px 15px;
+  text-decoration: none;
+  font-family: 'Roboto', sans-serif;
+}
+
+h5{
+  font-size: 15px;
+  font-weight: 700;
+  color: #000;
+  padding: 10px 15px;
+  text-decoration: none;
+  font-family: 'Roboto', sans-serif;
+}
 .search-input{
-  border: none;
   border-radius: 50px;
-  padding: 10px 20px;
-  outline: none;
+  border: none;
+  padding: 10px 15px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.2);
   transition: all 0.2s ease-in-out;
+  outline: none;
+  width: 100%;
+  background-color: #fff;
+  font-size: 15px;
+  font-family: 'Roboto', sans-serif;
+  color: #000;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .search-input:hover {
-  box-shadow: 0 0 10px rgba(0,0,0,0.5);
-  background-color: #fff;
+  box-shadow: 0 0 10px rgba(0,0,0,0.4);
+}
+
+#createFolder{
+  background-color:#ebeef1;
 }
 
 #aside {
   background-color: #fff;
   box-shadow: 0 0 10px rgba(0,0,0,0.2);
-  padding: 15px;
+  z-index: 1;
 }
 
 #hero {
   background-color: #fff;
-  border-radius: 10px;
   box-shadow: 0 0 10px rgba(0,0,0,0.2);
   display: flex;
   flex-direction: column;
@@ -39,29 +80,28 @@ body {
 }
 
 #mainNode:hover, #folderNode:hover {
-  border-radius: 50px;
-  background-color: #ebeef1;
+  cursor: pointer;
+  border-top: 2px solid #ebeef1;
+  border-bottom: 2px solid #ebeef1;
 }
 
-#fileItem, #folderItem {
-  padding: 5px;
+#folderFileItem {
+  padding: 10px;
   display: flex;
   align-items: center;
   transition: all 0.2s ease-in-out;
 }
 
-#fileItem:hover, #folderItem:hover {
-  box-shadow: 0 0 10px rgba(0,0,0,0.2);
+#folderFileItem:hover {
+  cursor: pointer;
+  box-shadow: 0 0 10px rgba(0,0,0,0.4)  ;
 }
 
 .selected {
-  background-color: #88baed;
-  border-radius: 50px;
+  background-color: #ebeef1;
 }
 
 .custom-dropdown {
-  
-  margin-left: 5px;
   border-radius: 50px;
   background-color: aliceblue;
   transition: all 0.2s ease-in-out;

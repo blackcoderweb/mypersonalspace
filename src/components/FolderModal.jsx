@@ -7,6 +7,7 @@ import {
   createFolder,
   updateParentFolder,
 } from "../features/fileSystem/fileSystemSlice";
+import propTypes from "prop-types";
 
 export const FolderModal = ({ action, title, label, buttonText }) => {
   const dispatch = useDispatch();
@@ -42,11 +43,10 @@ export const FolderModal = ({ action, title, label, buttonText }) => {
     <>
       {action === "create" ? (
         <Button
-          className="bg-primary bg-gradient"
           style={{ width: "10rem" }}
           onClick={handleShow}
         >
-          <i className="fa-solid fa-folder-plus"></i> Nuevo
+          <i className="fa-solid fa-folder-plus"></i> Nueva carpeta
         </Button>
       ) : (
         <div onClick={handleShow}>
@@ -93,4 +93,11 @@ export const FolderModal = ({ action, title, label, buttonText }) => {
       </Modal>
     </>
   );
+};
+
+FolderModal.propTypes = {
+  action: propTypes.string,
+  title: propTypes.string,
+  label: propTypes.string,
+  buttonText: propTypes.string,
 };

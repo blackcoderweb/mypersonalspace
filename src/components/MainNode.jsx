@@ -40,7 +40,7 @@ export const MainNode = () => {
               : "fa-solid fa-chevron-right fa-xs"
           }
         ></i>
-          <i className="fa-solid fa-hard-drive fa-xl" style={{ paddingLeft: "0.5rem", paddingRight: "0.5rem" }}></i>Mi unidad
+          <i className="fa-solid fa-hard-drive fa-xl" style={{ marginLeft: "0.5rem", marginRight: "0.5rem" }}></i>Mi unidad
         </Card.Body>
       </div>
       {expanded &&

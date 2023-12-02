@@ -82,7 +82,7 @@ const fileSystemSlice = createSlice({
         let files = state.fileSystemItems.root.unidad.files;
         if (files.length == 0) {
           state.fileSystemItems.root.unidad.files.push(file);
-          console.log(files)
+          //console.log(files)
         } else {
           if (existingName(files, selectedFile, ext)) {
             alert("Ya existe un archivo con este nombre en esta ubicación");
