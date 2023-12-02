@@ -1,16 +1,11 @@
 import { NavDropdown } from "react-bootstrap";
-import { AddModal } from "./FolderModal";
+import { FolderModal } from "./FolderModal";
+import { ShareModal } from "./ShareModal";
+import { DeleteModal } from "./DeleteModal";
+import Dropdown from "react-bootstrap/Dropdown";
 
-export const OptionsMenu = () => {
+export const OptionsMenu = ({ type, name }) => {
   const options = [
-    {
-      name: "Cambiar nombre",
-      icon: "fa-solid fa-pencil",
-    },
-    {
-      name: "Compartir",
-      icon: "fa-solid fa-share",
-    },
     {
       name: "Actualizar",
       icon: "fa-solid fa-sync",
@@ -40,11 +35,25 @@ export const OptionsMenu = () => {
           </div>
         }
       >
-        {options.map((option) => (
-          <NavDropdown.Item key={option.name}>
-            <AddModal action="update" title="Cambiar nombre" label="Nuevo nombre" buttonText="Actualizar"/>
-          </NavDropdown.Item>
-        ))}
+        <NavDropdown.Item>
+          {type === "carpeta" ? (
+            <FolderModal
+              action="update"
+              title="Cambiar nombre"
+              label="Nuevo nombre"
+              buttonText="Actualizar"
+            />
+          ) : (
+            <NavDropdown.Item>Actualizar {type}</NavDropdown.Item>
+          )}
+        </NavDropdown.Item>
+        <NavDropdown.Item>
+          <ShareModal type={type} name={name} />
+        </NavDropdown.Item>
+        <Dropdown.Divider />
+        <NavDropdown.Item>
+          <DeleteModal type={type} name={name} />
+        </NavDropdown.Item>
       </NavDropdown>
     </>
   );

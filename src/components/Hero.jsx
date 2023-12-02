@@ -1,10 +1,9 @@
 import Card from "react-bootstrap/Card";
-import { AddModal } from "./FolderModal";
+import { FolderModal } from "./FolderModal";
 import { UploadModal } from "./UploadModal";
 import { Row, Col } from "react-bootstrap";
-import { Folder } from "./Folder";
+import { FolderFileItem } from "./FolderFileItem";
 import { useSelector } from "react-redux";
-import { FileItem } from "./FileItem";
 import { useFindChildren } from "../hooks/useFindChildren";
 
 export const Hero = () => {
@@ -25,7 +24,7 @@ export const Hero = () => {
     >
       <Row className="d-flex gap-1 pt-4">
         <Col xm={6}>
-          <AddModal action="create" title="Nueva carpeta" label="Nombre" buttonText="Crear"/>
+          <FolderModal action="create" title="Nueva carpeta" label="Nombre" buttonText="Crear"/>
         </Col>
         <Col xm={6}>
           <UploadModal />
@@ -36,14 +35,14 @@ export const Hero = () => {
         <hr />
         <Row xs={1} md={4} className="g-2 justify-content-md-center">
           {folders && folders.map((folder) => (
-            <Folder key={folder.id} folder={folder} />
+            <FolderFileItem key={folder.id} item={folder} imageSrc="/images/folder.png" />
           ))}
         </Row>
         <h5 className="pt-5">Archivos</h5>
         <hr />
         <Row xs={1} md={4} className="g-2 justify-content-md-center">
           {files && files.map((file) => (
-            <FileItem key={file.id} file={file} />
+            <FolderFileItem key={file.id} item={file} imageSrc="/images/file.png" />
           ))}
         </Row>
       </section>

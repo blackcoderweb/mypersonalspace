@@ -8,7 +8,7 @@ import {
   updateParentFolder,
 } from "../features/fileSystem/fileSystemSlice";
 
-export const AddModal = ({ action, title, label, buttonText }) => {
+export const FolderModal = ({ action, title, label, buttonText }) => {
   const dispatch = useDispatch();
   const parentFolder = useSelector((state) => state.fileSystem.parentFolder);
   const [show, setShow] = useState(false);
@@ -55,7 +55,7 @@ export const AddModal = ({ action, title, label, buttonText }) => {
       )}
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>{title}</Modal.Title>
+          <h5>{title}</h5>
         </Modal.Header>
         <Modal.Body>
           <Form
