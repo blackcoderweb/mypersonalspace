@@ -7,7 +7,7 @@ export const FolderFileItem = ({ type, item, imageSrc }) => {
     <Card
   id="folderFileItem"
   border="light"
-  style={{ width: "12rem", height:"12rem", margin: "1rem" }}
+  style={{ width: "10rem", height:"8rem", margin: "0.5rem" }}
 >
   <div className="d-flex justify-content-between align-items-center"
   style={{
@@ -19,7 +19,7 @@ export const FolderFileItem = ({ type, item, imageSrc }) => {
         variant="top"
         src={imageSrc}
       />
-    <div style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>
+    <div style={{ overflow: 'hidden', textOverflow: 'ellipsis', fontSize:"15px" }}>
       {item.name}
     </div>
     <div>
@@ -27,7 +27,7 @@ export const FolderFileItem = ({ type, item, imageSrc }) => {
     </div>
   </div>
   <Card.Img
-        style={{ width: "10rem" }}
+        style={{ width: "5rem" }}
         variant="top"
         src={imageSrc}
       />

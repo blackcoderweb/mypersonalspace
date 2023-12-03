@@ -34,14 +34,14 @@ export const Hero = () => {
       <section id="folders-files" className="pt-5" style={{ width: "95%" }}>
         <h5>Carpetas</h5>
         <hr />
-        <Row xs={1} md={4} className="g-2 justify-content-md-center">
+        <Row xs={2} md={6} className="g-2">
           {folders && folders.map((folder) => (
             <FolderFileItem key={folder.id} type="carpeta" item={folder} imageSrc="/images/folder.png" />
           ))}
         </Row>
         <h5 className="pt-5">Archivos</h5>
         <hr />
-        <Row xs={1} md={4} className="g-2 justify-content-md-center">
+        <Row xs={2} md={6} className="g-2 pb-5">
           {files && files.map((file) => (
             <FolderFileItem key={file.id} type="archivo" item={file} imageSrc="/images/file.png" />
           ))}

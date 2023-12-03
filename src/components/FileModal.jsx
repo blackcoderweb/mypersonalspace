@@ -41,7 +41,8 @@ export const FileModal = ({ action, title, label }) => {
     <>
       {action === "upload" ? (
         <Button
-          style={{ width: "10rem" }}
+          id="uploadFileButton"
+          style={{ width: "10rem"}}
           onClick={handleShow}
         >
           <i className="fa-solid fa-file-arrow-up"></i> Subir archivo
@@ -89,7 +90,7 @@ export const FileModal = ({ action, title, label }) => {
             Cancelar
           </Button>
           <Button
-            variant="primary"
+            id="modalButton"
             onClick={action === "upload" ? handleUploadFile : handleUpdateFile}
           >
             Aceptar

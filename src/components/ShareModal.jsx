@@ -40,7 +40,7 @@ export const ShareModal = ({ type, name }) => {
           <Button variant="secondary" onClick={handleClose}>
             Cancelar
           </Button>
-          <Button variant="primary" onClick={handleClose}>
+          <Button id="modalButton" onClick={handleClose}>
             Compartir
           </Button>
         </Modal.Footer>

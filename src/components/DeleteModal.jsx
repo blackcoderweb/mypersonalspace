@@ -23,7 +23,7 @@ export const DeleteModal = ({type, name}) => {
           <Button variant="secondary" onClick={handleClose}>
             Cancelar
           </Button>
-          <Button variant="outline-danger" onClick={handleClose}>
+          <Button variant="danger" onClick={handleClose}>
             Confirmar
           </Button>
         </Modal.Footer>

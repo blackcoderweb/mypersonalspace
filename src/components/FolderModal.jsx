@@ -43,6 +43,7 @@ export const FolderModal = ({ action, title, label, buttonText }) => {
     <>
       {action === "create" ? (
         <Button
+          id="createFolderButton"
           style={{ width: "10rem" }}
           onClick={handleShow}
         >
@@ -82,7 +83,7 @@ export const FolderModal = ({ action, title, label, buttonText }) => {
             Cancelar
           </Button>
           <Button
-            variant="primary"
+            id="modalButton"
             onClick={
               action === "create" ? handleCreateFolder : handleUpdateFolder
             }

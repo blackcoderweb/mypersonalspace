@@ -53,12 +53,40 @@ h5{
   justify-content: center;
 }
 
-.search-input:hover {
+#createFolderButton, #uploadFileButton {
+  border: none;
+  padding: 20px 15px;
+  border-radius: 25px;
+  transition: all 0.1s ease-in-out;
+  outline: none;
+  width: 100%;
+  background-color: #dbdfe7;
+  font-size: 15px;
+  font-family: 'Roboto', sans-serif;
+  color: #000;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+#createFolderButton:hover, #uploadFileButton:hover {
+  cursor: pointer;
   box-shadow: 0 0 10px rgba(0,0,0,0.4);
 }
 
-#createFolder{
-  background-color:#ebeef1;
+#modalButton{
+  background-color: #3493eb;
+  border-color: #3493eb;
+}
+
+#modalButton:hover{
+  background-color: #2578d7;
+  border-color: #2578d7;
+}
+
+.search-input:hover {
+  box-shadow: 0 0 10px rgba(0,0,0,0.4);
 }
 
 #aside {
