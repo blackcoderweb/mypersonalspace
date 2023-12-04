@@ -4,12 +4,13 @@ import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
 import { useDispatch, useSelector } from "react-redux";
 import {
+  changeFolderName,
   createFolder,
   updateParentFolder,
 } from "../features/fileSystem/fileSystemSlice";
 import propTypes from "prop-types";
 
-export const FolderModal = ({ action, title, label, buttonText }) => {
+export const FolderModal = ({ action, title, label, buttonText, id }) => {
   const dispatch = useDispatch();
   const parentFolder = useSelector((state) => state.fileSystem.parentFolder);
   const [show, setShow] = useState(false);
@@ -31,12 +32,16 @@ export const FolderModal = ({ action, title, label, buttonText }) => {
   };
 
   const handleUpdateFolder = () => {
-    alert("Voy a actualizar la carpeta");
+    dispatch(changeFolderName({folderId:id, newFolderName: folderName, parentFolder, ext: false}));
+    dispatch(updateParentFolder({ parentFolder: parentFolder }));
+    setShow(false);
   };
 
   const handleSubmitUpdateFolder = (e) => {
     e.preventDefault();
-    alert("Voy a actualizar la carpeta");
+    dispatch(changeFolderName({folderId:id, newFolderName: folderName, parentFolder, ext: false}));
+    dispatch(updateParentFolder({ parentFolder: parentFolder }));
+    setShow(false);
   };
 
   return (
@@ -101,4 +106,5 @@ FolderModal.propTypes = {
   title: propTypes.string,
   label: propTypes.string,
   buttonText: propTypes.string,
+  id: propTypes.string,
 };

@@ -3,6 +3,8 @@ import Card from "react-bootstrap/Card";
 import { OptionsMenu } from "./OptionsMenu";
 
 export const FolderFileItem = ({ type, item, imageSrc }) => {
+
+  let currentFile = item.version ? item.version[item.version.length - 1] : undefined;
   return (
     <Card
   id="folderFileItem"
@@ -20,10 +22,10 @@ export const FolderFileItem = ({ type, item, imageSrc }) => {
         src={imageSrc}
       />
     <div style={{ overflow: 'hidden', textOverflow: 'ellipsis', fontSize:"15px" }}>
-      {item.name}
+      {type === "carpeta" ? item.name : currentFile.name}
     </div>
     <div>
-      <OptionsMenu type={type} name={item.name}/>
+      <OptionsMenu type={type} name={type === "carpeta" ? item.name : currentFile.name} id={type === "carpeta" ? item.id : currentFile.id}/>
     </div>
   </div>
   <Card.Img

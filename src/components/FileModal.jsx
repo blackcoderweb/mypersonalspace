@@ -4,12 +4,13 @@ import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
 import { useDispatch, useSelector } from "react-redux";
 import {
+  updateFileVersion,
   updateParentFolder,
   uploadFile,
 } from "../features/fileSystem/fileSystemSlice";
 import PropTypes from "prop-types";
 
-export const FileModal = ({ action, title, label }) => {
+export const FileModal = ({id, action, title, label }) => {
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
@@ -33,8 +34,15 @@ export const FileModal = ({ action, title, label }) => {
     }
   };
 
-  const handleUpdateFile = () => {
-    alert("Voy a actualizar el archivo");
+  const handleUpdateFileVersion = () => {
+    if (selectedFile) {
+      dispatch(
+        updateFileVersion({ fileId: id, fileUrl, fileName: selectedFile, tags, parentFolder: parentFolder })
+      );
+      dispatch(updateParentFolder({ parentFolder: parentFolder }));
+      setShow(false);
+      setSelectedFile("");
+    }
   };
 
   return (
@@ -91,7 +99,7 @@ export const FileModal = ({ action, title, label }) => {
           </Button>
           <Button
             id="modalButton"
-            onClick={action === "upload" ? handleUploadFile : handleUpdateFile}
+            onClick={action === "upload" ? handleUploadFile : handleUpdateFileVersion}
           >
             Aceptar
           </Button>
@@ -105,4 +113,5 @@ FileModal.propTypes = {
   action: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
   label: PropTypes.string.isRequired,
+  id: PropTypes.string,
 };

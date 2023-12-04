@@ -61,6 +61,55 @@ const fileSystemSlice = createSlice({
         }
       }
     },
+    changeFolderName: (state, action) => {
+      let { folderId, newFolderName, parentFolder, ext } = action.payload;
+      if (newFolderName == "") {
+        alert("El nombre de la carpeta no puede estar vacío");
+        return;
+      }
+      //Busco la carpeta por el id usando jsonpath-plus
+      let folder = JSONPath({
+        path: `$..folders[?(@.id=='${folderId}')]`,
+        json: state.fileSystemItems,
+      });
+      //Cuando quiero cambiar el nombre de una carpeta en la unidad principal
+      if (parentFolder == "root.unidad") {
+        let folders = state.fileSystemItems.root.unidad.folders;
+        if (folders.length == 0) {
+          alert("No se pudo cambiar el nombre de la carpeta");
+        } else {
+          if (existingName(folders, newFolderName, ext)) {
+            alert("Ya existe una carpeta con este nombre en esta ubicación");
+          } else {
+            folder[0].name = newFolderName;
+          }
+        }
+      } else {
+        //Cuando quiero cambiar el nombre de una carpeta en una carpeta que no es la unidad principal, busco su padre por el id usando jsonpath-plus
+        let parent = JSONPath({
+          path: `$..folders[?(@.id=='${parentFolder}')]`,
+          json: state.fileSystemItems,
+        });
+        //Si el padre existe, busco si ya existe una carpeta con el mismo nombre
+        if (parent.length > 0) {
+          if (existingName(parent[0].folders, newFolderName, ext)) {
+            alert("Ya existe una carpeta con este nombre en esta ubicación");
+          } else {
+            folder[0].name = newFolderName;
+          }
+        } else {
+          alert("No se pudo cambiar el nombre de la carpeta");
+        }
+      }
+    },
+    shareFolderFile: (state, action) => {
+      let { folderId, user, permission, parentFolder } = action.payload;
+      //Busco la carpeta por el id usando jsonpath-plus
+      let folder = JSONPath({
+        path: `$..folders[?(@.id=='${folderId}')]`,
+        json: state.fileSystemItems,
+      });
+    },
     uploadFile: (state, action) => {
       let { selectedFile, fileUrl, tags, parentFolder, ext } = action.payload;
       let file = {
@@ -71,22 +120,24 @@ const fileSystemSlice = createSlice({
             id: uuidv4(),
             url: fileUrl,
             name: selectedFile,
-            tags: tags		
-          }
-          ],
-          share: []		
+            tags: tags,
+          },
+        ],
+        share: [],
       };
 
       //Cuando quiero subir un archivo a la unidad principal
       if (parentFolder == "root.unidad") {
         let files = state.fileSystemItems.root.unidad.files;
         if (files.length == 0) {
+          file.version[0].id = file.id;
           state.fileSystemItems.root.unidad.files.push(file);
           //console.log(files)
         } else {
           if (existingName(files, selectedFile, ext)) {
             alert("Ya existe un archivo con este nombre en esta ubicación");
           } else {
+            file.version[0].id = file.id;
             state.fileSystemItems.root.unidad.files.push(file);
           }
         }
@@ -101,11 +152,33 @@ const fileSystemSlice = createSlice({
           if (existingName(parent[0].files, selectedFile, ext)) {
             alert("Ya existe un archivo con este nombre en esta ubicación");
           } else {
+            file.version[0].id = file.id;
             parent[0].files.push(file);
           }
         } else {
           alert("No se pudo subir el archivo");
         }
+      }
+    },
+    updateFileVersion: (state, action) => {
+      let { fileId, fileUrl, selectedFile, tags, parentFolder } = action.payload;
+      let newVersion = {
+        id: uuidv4(),
+        url: fileUrl,
+        name: selectedFile,
+        tags: tags,
+      };
+      //Si el archivo que quiero está en la unidad principal
+      if (parentFolder == "root.unidad"){
+        let files = state.fileSystemItems.root.unidad.files;
+        console.log(files)
+      }else{
+      //Si el archivo que quiero actualizar no está en la unidad principal, busco su padre por el id usando jsonpath-plus
+      let parent = JSONPath({
+        path: `$..folders[?(@.id=='${parentFolder}')]`,
+        json: state.fileSystemItems,
+      });
+      console.log(parent.files)
       }
     },
     updateParentFolder: (state, action) => {
@@ -115,6 +188,11 @@ const fileSystemSlice = createSlice({
   },
 });
 
-export const { createFolder, uploadFile, updateParentFolder } =
-  fileSystemSlice.actions;
+export const {
+  createFolder,
+  changeFolderName,
+  uploadFile,
+  updateFileVersion,
+  updateParentFolder,
+} = fileSystemSlice.actions;
 export default fileSystemSlice.reducer;

@@ -2,6 +2,7 @@ import { useState } from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
+import PropTypes from "prop-types";
 
 export const ShareModal = ({ type, name }) => {
   const [show, setShow] = useState(false);
@@ -29,9 +30,9 @@ export const ShareModal = ({ type, name }) => {
               controlId="exampleForm.ControlTextarea1"
             >
               <div className="mb-3">
-                <Form.Check defaultChecked type="checkbox" label="Lectura" />
-
-                <Form.Check type="checkbox" label="Escritura" />
+                Permisos
+                <Form.Check type="radio" label="Lectura" />
+                <Form.Check type="radio" label="Escritura" />
               </div>
             </Form.Group>
           </Form>
@@ -48,3 +49,8 @@ export const ShareModal = ({ type, name }) => {
     </>
   );
 };
+
+ShareModal.propTypes = {
+  type: PropTypes.string,
+  name: PropTypes.string,
+}
