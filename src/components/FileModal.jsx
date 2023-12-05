@@ -10,7 +10,7 @@ import {
 } from "../features/fileSystem/fileSystemSlice";
 import PropTypes from "prop-types";
 
-export const FileModal = ({id, action, title, label }) => {
+export const FileModal = ({fileParentId, action, title, label }) => {
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
@@ -37,7 +37,7 @@ export const FileModal = ({id, action, title, label }) => {
   const handleUpdateFileVersion = () => {
     if (selectedFile) {
       dispatch(
-        updateFileVersion({ fileId: id, fileUrl, fileName: selectedFile, tags, parentFolder: parentFolder })
+        updateFileVersion({ fileParentId:fileParentId, fileUrl, selectedFile: selectedFile, tags, parentFolder: parentFolder })
       );
       dispatch(updateParentFolder({ parentFolder: parentFolder }));
       setShow(false);
@@ -113,5 +113,5 @@ FileModal.propTypes = {
   action: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
   label: PropTypes.string.isRequired,
-  id: PropTypes.string,
+  fileParentId: PropTypes.string,
 };

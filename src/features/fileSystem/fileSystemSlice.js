@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { v4 as uuidv4 } from "uuid";
 import { existingName } from "../../helpers/existingName";
 import { JSONPath } from "jsonpath-plus";
+import { parentFileIndex } from "../../helpers/parentFileIndex";
 
 const initialState = {
   fileSystemItems: {
@@ -110,6 +111,19 @@ const fileSystemSlice = createSlice({
         json: state.fileSystemItems,
       });
     },
+    deleteFolderFile: (state, action) => {
+      let { id, parent, type } = action.payload;
+
+      //Si voy a eliminar de la unidad principal
+      if(parent == "root.unidad"){
+        if(type === "folder"){
+          let folders = state.fileSystemItems.root.unidad.folders;
+          let index = folders.findIndex((folder) => folder.id === id);
+          folders.splice(index, 1);
+      }
+    }
+      
+    },
     uploadFile: (state, action) => {
       let { selectedFile, fileUrl, tags, parentFolder, ext } = action.payload;
       let file = {
@@ -130,14 +144,11 @@ const fileSystemSlice = createSlice({
       if (parentFolder == "root.unidad") {
         let files = state.fileSystemItems.root.unidad.files;
         if (files.length == 0) {
-          file.version[0].id = file.id;
           state.fileSystemItems.root.unidad.files.push(file);
-          //console.log(files)
         } else {
           if (existingName(files, selectedFile, ext)) {
             alert("Ya existe un archivo con este nombre en esta ubicación");
           } else {
-            file.version[0].id = file.id;
             state.fileSystemItems.root.unidad.files.push(file);
           }
         }
@@ -152,7 +163,6 @@ const fileSystemSlice = createSlice({
           if (existingName(parent[0].files, selectedFile, ext)) {
             alert("Ya existe un archivo con este nombre en esta ubicación");
           } else {
-            file.version[0].id = file.id;
             parent[0].files.push(file);
           }
         } else {
@@ -161,7 +171,7 @@ const fileSystemSlice = createSlice({
       }
     },
     updateFileVersion: (state, action) => {
-      let { fileId, fileUrl, selectedFile, tags, parentFolder } = action.payload;
+      let { fileParentId, fileUrl, selectedFile, tags, parentFolder } = action.payload;
       let newVersion = {
         id: uuidv4(),
         url: fileUrl,
@@ -171,14 +181,20 @@ const fileSystemSlice = createSlice({
       //Si el archivo que quiero está en la unidad principal
       if (parentFolder == "root.unidad"){
         let files = state.fileSystemItems.root.unidad.files;
-        console.log(files)
+        //Busco el índice del padre del archivo que quiero actualizar
+        let index = parentFileIndex(files, fileParentId);
+        //En la propiedad version del archivo que quiero actualizar, agrego la nueva versión
+        files[index].version.push(newVersion);    
       }else{
       //Si el archivo que quiero actualizar no está en la unidad principal, busco su padre por el id usando jsonpath-plus
       let parent = JSONPath({
         path: `$..folders[?(@.id=='${parentFolder}')]`,
         json: state.fileSystemItems,
       });
-      console.log(parent.files)
+      //Busco el índice del padre del archivo que quiero actualizar
+      let index = parentFileIndex(parent[0].files, fileParentId);
+      //En la propiedad version del archivo que quiero actualizar, agrego la nueva versión
+      parent[0].files[index].version.push(newVersion);
       }
     },
     updateParentFolder: (state, action) => {
@@ -191,6 +207,7 @@ const fileSystemSlice = createSlice({
 export const {
   createFolder,
   changeFolderName,
+  deleteFolderFile,
   uploadFile,
   updateFileVersion,
   updateParentFolder,

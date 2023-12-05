@@ -31,8 +31,8 @@ export const ShareModal = ({ type, name }) => {
             >
               <div className="mb-3">
                 Permisos
-                <Form.Check type="radio" label="Lectura" />
-                <Form.Check type="radio" label="Escritura" />
+                <Form.Check type="checkBox" label="Lectura" defaultChecked/>
+                <Form.Check type="checkBox" label="Escritura" />
               </div>
             </Form.Group>
           </Form>

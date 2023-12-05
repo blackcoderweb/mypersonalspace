@@ -6,7 +6,7 @@ import Dropdown from "react-bootstrap/Dropdown";
 import PropTypes from "prop-types";
 import { FileModal } from "./FileModal";
 
-export const OptionsMenu = ({ type, name, id }) => {
+export const OptionsMenu = ({ type, name, id, fileParentId }) => {
   return (
     <>
       <NavDropdown
@@ -43,6 +43,7 @@ export const OptionsMenu = ({ type, name, id }) => {
               title="Actualizar archivo"
               label="Seleccionar nueva versión"
               id={id}
+              fileParentId={fileParentId}
             />
           </NavDropdown.Item>
         )}
@@ -50,9 +51,9 @@ export const OptionsMenu = ({ type, name, id }) => {
         <NavDropdown.Item as="div">
           <ShareModal type={type} name={name} />
         </NavDropdown.Item>
-        <Dropdown.Divider style={{width: "90%", margin: "0 auto"}} />
+        <Dropdown.Divider style={{ width: "90%", margin: "0 auto" }} />
         <NavDropdown.Item as="div">
-          <DeleteModal type={type} name={name} />
+          <DeleteModal type={type} name={name} id={id} />
         </NavDropdown.Item>
       </NavDropdown>
     </>
@@ -63,4 +64,5 @@ OptionsMenu.propTypes = {
   type: PropTypes.string,
   name: PropTypes.string,
   id: PropTypes.string,
+  fileParentId: PropTypes.string,
 };

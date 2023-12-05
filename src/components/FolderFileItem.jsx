@@ -16,16 +16,11 @@ export const FolderFileItem = ({ type, item, imageSrc }) => {
     whiteSpace: "nowrap",
     width: "100%",
   }}>
-    <Card.Img
-        style={{ width: "1.5rem" }}
-        variant="top"
-        src={imageSrc}
-      />
     <div style={{ overflow: 'hidden', textOverflow: 'ellipsis', fontSize:"15px" }}>
       {type === "carpeta" ? item.name : currentFile.name}
     </div>
     <div>
-      <OptionsMenu type={type} name={type === "carpeta" ? item.name : currentFile.name} id={type === "carpeta" ? item.id : currentFile.id}/>
+      <OptionsMenu type={type} name={type === "carpeta" ? item.name : currentFile.name} id={type === "carpeta" ? item.id : currentFile.id} fileParentId={item.id}/>
     </div>
   </div>
   <Card.Img

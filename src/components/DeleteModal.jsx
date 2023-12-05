@@ -1,12 +1,28 @@
 import { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
+import { useDispatch, useSelector } from 'react-redux';
+import { deleteFolderFile } from '../features/fileSystem/fileSystemSlice';
+import PropTypes from 'prop-types';
 
-export const DeleteModal = ({type, name}) => {
+export const DeleteModal = ({type, name, id}) => {
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+
+  const parentFolder = useSelector((state) => state.fileSystem.parentFolder);
+
+  const dispatch = useDispatch();
+
+  const handleDeleteFolder = () => {
+    dispatch(deleteFolderFile({type: "folder", id: id, parent: parentFolder}));
+    setShow(false);
+  }
+
+  const handleDeleteFile = () => {
+    dispatch(deleteFolderFile({type: "file", id: id}))
+  }
 
   return (
     <>
@@ -23,12 +39,18 @@ export const DeleteModal = ({type, name}) => {
           <Button variant="secondary" onClick={handleClose}>
             Cancelar
           </Button>
-          <Button variant="danger" onClick={handleClose}>
+          <Button variant="danger" onClick={type === "carpeta" ? handleDeleteFolder: handleDeleteFile}>
             Confirmar
           </Button>
         </Modal.Footer>
       </Modal>
     </>
   );
+}
+
+DeleteModal.propTypes = {
+  type: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
+  id: PropTypes.string.isRequired,
 }
 
