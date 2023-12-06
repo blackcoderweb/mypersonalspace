@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { deleteFolderFile } from '../features/fileSystem/fileSystemSlice';
 import PropTypes from 'prop-types';
 
-export const DeleteModal = ({type, name, id}) => {
+export const DeleteModal = ({type, name, id, fileParentId}) => {
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
@@ -21,7 +21,8 @@ export const DeleteModal = ({type, name, id}) => {
   }
 
   const handleDeleteFile = () => {
-    dispatch(deleteFolderFile({type: "file", id: id}))
+    dispatch(deleteFolderFile({type: "file", id: fileParentId, parent: parentFolder}))
+    setShow(false);
   }
 
   return (
@@ -52,5 +53,6 @@ DeleteModal.propTypes = {
   type: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   id: PropTypes.string.isRequired,
+  fileParentId: PropTypes.string
 }
 

@@ -3,6 +3,8 @@ import { v4 as uuidv4 } from "uuid";
 import { existingName } from "../../helpers/existingName";
 import { JSONPath } from "jsonpath-plus";
 import { parentFileIndex } from "../../helpers/parentFileIndex";
+import { findUser } from "../../helpers/findUser";
+import { users } from "../../data/testData";
 
 const initialState = {
   fileSystemItems: {
@@ -104,25 +106,76 @@ const fileSystemSlice = createSlice({
       }
     },
     shareFolderFile: (state, action) => {
-      let { folderId, user, permission, parentFolder } = action.payload;
-      //Busco la carpeta por el id usando jsonpath-plus
-      let folder = JSONPath({
-        path: `$..folders[?(@.id=='${folderId}')]`,
-        json: state.fileSystemItems,
-      });
+      let {type, id, userName, permission, parentFolder } = action.payload;
+      let shared = {
+        user: userName,
+        permissions: permission,
+      }
+      if (findUser(users, userName)){
+        if(type === "carpeta"){
+          //Si el padre es la unidad principal
+          if (parentFolder == "root.unidad") {
+            let folders = state.fileSystemItems.root.unidad.folders;
+            //Busco el índice de la carpeta que quiero compartir
+            let index = folders.findIndex((folder) => folder.id === id);
+            //En la propiedad share de la carpeta que quiero compartir, agrego el usuario con sus permisos
+            folders[index].share.push(shared);
+          }else{
+            //Si el padre no es la unidad principal
+            //Busco el padre de la carpeta por el id usando jsonpath-plus
+            let parent = JSONPath({
+              path: `$..folders[?(@.id=='${parentFolder}')]`,
+              json: state.fileSystemItems,
+            });
+            //Busco el índice de la carpeta que quiero compartir
+            let index = parent[0].folders.findIndex((folder) => folder.id === id);
+            //En la propiedad share de la carpeta que quiero compartir, agrego el usuario con sus permisos
+            parent[0].folders[index].share.push(shared);
+          }
+        }else{
+          alert("Vamos a compartir un archivo")
+        }
+      }else{
+        alert("No existe un usuario con ese nombre")
+      }
+      
     },
     deleteFolderFile: (state, action) => {
       let { id, parent, type } = action.payload;
 
       //Si voy a eliminar de la unidad principal
-      if(parent == "root.unidad"){
-        if(type === "folder"){
+      if (parent == "root.unidad") {
+        if (type === "folder") {
           let folders = state.fileSystemItems.root.unidad.folders;
           let index = folders.findIndex((folder) => folder.id === id);
           folders.splice(index, 1);
+          //Si voy a eliminar un archivo de la unidad principal
+        } else {
+          let files = state.fileSystemItems.root.unidad.files;
+          let index = files.findIndex((file) => file.id === id);
+          files.splice(index, 1);
+        }
+        //Si voy a eliminar una carpeta que no está en la unidad principal
+      } else {
+        if (type === "folder") {
+          let parentFolder = JSONPath({
+            path: `$..folders[?(@.id=='${parent}')]`,
+            json: state.fileSystemItems,
+          });
+          let folders = parentFolder[0].folders;
+          let index = folders.findIndex((folder) => folder.id === id);
+          folders.splice(index, 1);
+          //Si voy a eliminar un archivo que no está en la unidad principal
+        } else {
+          let parentFolder = JSONPath({
+            path: `$..folders[?(@.id=='${parent}')]`,
+            json: state.fileSystemItems,
+          });
+          let files = parentFolder[0].files;
+          let index = files.findIndex((file) => file.id === id);
+          files.splice(index, 1);
+        }
       }
-    }
-      
     },
     uploadFile: (state, action) => {
       let { selectedFile, fileUrl, tags, parentFolder, ext } = action.payload;
@@ -171,7 +224,8 @@ const fileSystemSlice = createSlice({
       }
     },
     updateFileVersion: (state, action) => {
-      let { fileParentId, fileUrl, selectedFile, tags, parentFolder } = action.payload;
+      let { fileParentId, fileUrl, selectedFile, tags, parentFolder } =
+        action.payload;
       let newVersion = {
         id: uuidv4(),
         url: fileUrl,
@@ -179,22 +233,22 @@ const fileSystemSlice = createSlice({
         tags: tags,
       };
       //Si el archivo que quiero está en la unidad principal
-      if (parentFolder == "root.unidad"){
+      if (parentFolder == "root.unidad") {
         let files = state.fileSystemItems.root.unidad.files;
         //Busco el índice del padre del archivo que quiero actualizar
         let index = parentFileIndex(files, fileParentId);
         //En la propiedad version del archivo que quiero actualizar, agrego la nueva versión
-        files[index].version.push(newVersion);    
-      }else{
-      //Si el archivo que quiero actualizar no está en la unidad principal, busco su padre por el id usando jsonpath-plus
-      let parent = JSONPath({
-        path: `$..folders[?(@.id=='${parentFolder}')]`,
-        json: state.fileSystemItems,
-      });
-      //Busco el índice del padre del archivo que quiero actualizar
-      let index = parentFileIndex(parent[0].files, fileParentId);
-      //En la propiedad version del archivo que quiero actualizar, agrego la nueva versión
-      parent[0].files[index].version.push(newVersion);
+        files[index].version.push(newVersion);
+      } else {
+        //Si el archivo que quiero actualizar no está en la unidad principal, busco su padre por el id usando jsonpath-plus
+        let parent = JSONPath({
+          path: `$..folders[?(@.id=='${parentFolder}')]`,
+          json: state.fileSystemItems,
+        });
+        //Busco el índice del padre del archivo que quiero actualizar
+        let index = parentFileIndex(parent[0].files, fileParentId);
+        //En la propiedad version del archivo que quiero actualizar, agrego la nueva versión
+        parent[0].files[index].version.push(newVersion);
       }
     },
     updateParentFolder: (state, action) => {
@@ -207,6 +261,7 @@ const fileSystemSlice = createSlice({
 export const {
   createFolder,
   changeFolderName,
+  shareFolderFile,
   deleteFolderFile,
   uploadFile,
   updateFileVersion,
