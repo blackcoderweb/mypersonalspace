@@ -35,7 +35,7 @@ export const DeleteModal = ({type, name, id, fileParentId}) => {
         <Modal.Header closeButton>
           <h5>Eliminar {type}</h5>
         </Modal.Header>
-        <Modal.Body>¿Está seguro que desea eliminar {name}?</Modal.Body>
+        <Modal.Body className='my-4'>¿Está seguro que desea eliminar {name}?</Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleClose}>
             Cancelar

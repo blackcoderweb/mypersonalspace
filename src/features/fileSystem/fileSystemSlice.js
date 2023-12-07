@@ -106,7 +106,7 @@ const fileSystemSlice = createSlice({
       }
     },
     shareFolderFile: (state, action) => {
-      let {type, id, userName, permission, parentFolder } = action.payload;
+      let {type, id, userName, permission, parentFolder, fileParentId } = action.payload;
       let shared = {
         user: userName,
         permissions: permission,
@@ -133,7 +133,24 @@ const fileSystemSlice = createSlice({
             parent[0].folders[index].share.push(shared);
           }
         }else{
-          alert("Vamos a compartir un archivo")
+          //Si el archivo está en la unidad principal
+          if (parentFolder == "root.unidad") {
+            let files = state.fileSystemItems.root.unidad.files;
+            //Busco el índice del archivo que quiero compartir
+            let index = files.findIndex((file) => file.id === fileParentId);
+            //En la propiedad share del archivo que quiero compartir, agrego el usuario con sus permisos
+            files[index].share.push(shared);
+          }else{
+            //Si el archivo que quiero compartir no está en la unidad principal, busco su padre por el id usando jsonpath-plus
+            let parent = JSONPath({
+              path: `$..folders[?(@.id=='${parentFolder}')]`,
+              json: state.fileSystemItems,
+            });
+            //Busco el índice del archivo que quiero compartir
+            let index = parent[0].files.findIndex((file) => file.id === fileParentId);
+            //En la propiedad share del archivo que quiero compartir, agrego el usuario con sus permisos
+            parent[0].files[index].share.push(shared);
+          }
         }
       }else{
         alert("No existe un usuario con ese nombre")

@@ -11,7 +11,10 @@ export const Navigation = () => {
   return (
     <Navbar id="navbar" expand="lg" style={{ height: "10vh" }}>
       <Container fluid>
-        <Navbar.Brand className="logo">Mi espacio</Navbar.Brand>
+        <Navbar.Brand className="logo">
+          <h1>ARCA</h1>
+          <p>Gestión de archivos y carpetas</p>
+        </Navbar.Brand>
         <Nav
           className="me-auto my-2 my-lg-0"
           style={{ maxHeight: "100px" }}

@@ -5,6 +5,7 @@ import { DeleteModal } from "./DeleteModal";
 import Dropdown from "react-bootstrap/Dropdown";
 import PropTypes from "prop-types";
 import { FileModal } from "./FileModal";
+import { EditPermitsModal } from "./EditPermitsModal";
 
 export const OptionsMenu = ({ type, name, id, fileParentId }) => {
   return (
@@ -49,11 +50,29 @@ export const OptionsMenu = ({ type, name, id, fileParentId }) => {
         )}
 
         <NavDropdown.Item as="div">
-          <ShareModal type={type} name={name} id={id} fileParentId={fileParentId}/>
+          <ShareModal
+            type={type}
+            name={name}
+            id={id}
+            fileParentId={fileParentId}
+          />
+        </NavDropdown.Item>
+        <NavDropdown.Item as="div">
+          <EditPermitsModal
+            type={type}
+            name={name}
+            id={id}
+            fileParentId={fileParentId}
+          />
         </NavDropdown.Item>
         <Dropdown.Divider style={{ width: "90%", margin: "0 auto" }} />
         <NavDropdown.Item as="div">
-          <DeleteModal type={type} name={name} id={id} fileParentId={fileParentId}/>
+          <DeleteModal
+            type={type}
+            name={name}
+            id={id}
+            fileParentId={fileParentId}
+          />
         </NavDropdown.Item>
       </NavDropdown>
     </>

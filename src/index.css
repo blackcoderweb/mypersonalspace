@@ -8,8 +8,7 @@ body {
 }
 
 #navbar{
-  background-color: #f8f9fa;
-  box-shadow: 0 0 10px rgba(0,0,0,0.2);
+  background-color: #dbdfe7;
   padding: 15px;
   display: flex;
   justify-content: space-between;
@@ -18,13 +17,19 @@ body {
   z-index: 2;
 }
 
-#navbar .logo {
-  font-size: 20px;
+.logo h1 {
+  font-size: 30px;
   font-weight: 700;
   color: #000;
-  padding: 10px 15px;
   text-decoration: none;
   font-family: 'Roboto', sans-serif;
+  margin: 0;
+}
+
+.logo p {
+  font-size: 15px;
+  margin: 0;
+  font-weight: 600;
 }
 
 h5{

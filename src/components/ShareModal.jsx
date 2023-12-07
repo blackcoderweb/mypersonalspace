@@ -48,6 +48,7 @@ export const ShareModal = ({ type, name, id, fileParentId }) => {
           userName: userName,
           permission: escrituraChecked ? "escritura" : "lectura",
           parentFolder: parentFolder,
+          fileParentId: fileParentId,
         })
       );
       setError(false);
@@ -63,7 +64,7 @@ export const ShareModal = ({ type, name, id, fileParentId }) => {
   return (
     <>
       <div onClick={handleShow}>
-        <i className="fa-solid fa-share"></i> Compartir {type}
+        <i className="fa-solid fa-share-from-square"></i> Compartir {type}
       </div>
 
       <Modal show={show} onHide={handleClose}>
