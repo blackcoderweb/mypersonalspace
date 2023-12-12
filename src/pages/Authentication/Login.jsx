@@ -7,6 +7,7 @@ import Alert from "react-bootstrap/Alert";
 import { users } from "../../data/testData";
 import { useState } from "react";
 import useAuth from "../../hooks/useAuth";
+import { login } from "../../api/auth";
 
 /*const validate = (values) => {
   const errors = {};
@@ -35,8 +36,17 @@ export const Login = () => {
       userName: Yup.string().required("Usuario requerido"),
       password: Yup.string().required("Contraseña requerida"),
     }),
-    onSubmit: (values) => {
-      const userToLog = users.find((user) => user.userName === values.userName);
+    onSubmit: async (values) => {
+      try {
+        const response = await login(values);
+        console.log(response)
+      } catch (error) {
+        console.log(error)
+      }
+
+
+
+      /* const userToLog = users.find((user) => user.userName === values.userName);
       if (!userToLog || userToLog.pass !== values.password) {
         setError(true);
       } else {
@@ -44,7 +54,7 @@ export const Login = () => {
         setAuth(userToLog.userName);
 
         window.location.href = `/dashboard/`;
-      }
+      } */
     },
   });
 

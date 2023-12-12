@@ -4,6 +4,7 @@ import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import useAuth from "../hooks/useAuth";
+import { Link } from "react-router-dom";
 
 export const Navigation = () => {
   const { auth } = useAuth();
@@ -43,10 +44,10 @@ export const Navigation = () => {
           id="navbarScrollingDropdown"
           style={{ paddingLeft: "1rem", paddingRight: "1rem" }}
         >
-          <NavDropdown.Item href="/dashboard/logout">
+          <Link to='/logout' className="dropdown-item">
             <i className="fa-solid fa-arrow-right-from-bracket"></i> Cerrar
             sesión
-          </NavDropdown.Item>
+          </Link>          
         </NavDropdown>
         <i className="fa-solid fa-circle-user fa-2xl"></i>
       </Container>

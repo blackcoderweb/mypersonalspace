@@ -1,4 +1,4 @@
-import { Routes, Route, HashRouter } from "react-router-dom";
+import { Routes, Route, BrowserRouter } from "react-router-dom";
 import PublicLayout from "../layout/PublicLayout";
 import { Login } from "../pages/Authentication/Login";
 import { NotFound } from "../pages/NotFound/NotFound";
@@ -10,21 +10,18 @@ import { Logout } from "../pages/Authentication/Logout";
 export const Routing = () => {
   return (
     <AuthProvider>
-      <HashRouter>
-        <Routes>
-          <Route path="/" element={<PublicLayout />}>
-            <Route index element={<Login />} />
-            <Route path="/login" element={<Login />} />
-          </Route>
+      <BrowserRouter>
+      <Routes>
+          <Route exact={true} path="/login" element={<Login />} />
 
-          <Route path="/dashboard" element={<PrivateLayout />}>
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="logout" element={<Logout/>} />
+          <Route exact={true} path="/" element={<PrivateLayout />}>
+            <Route exact={true} path="/dashboard" element={<Dashboard />} />
+            <Route exact={true} path="logout" element={<Logout/>} />
           </Route>
 
           <Route path="*" element={<NotFound />} />
         </Routes>
-      </HashRouter>
+      </BrowserRouter>        
     </AuthProvider>
   );
 };
