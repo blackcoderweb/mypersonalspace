@@ -8,6 +8,7 @@ import { users } from "../../data/testData";
 import { useState } from "react";
 import useAuth from "../../hooks/useAuth";
 import { login } from "../../api/auth";
+import { useNavigate } from "react-router-dom";
 
 /*const validate = (values) => {
   const errors = {};
@@ -26,6 +27,7 @@ export const Login = () => {
   const [error, setError] = useState(false);
   const [show, setShow] = useState(null);
   const { setAuth } = useAuth();
+  const navigate = useNavigate();
 
   const formik = useFormik({
     initialValues: {
@@ -39,22 +41,13 @@ export const Login = () => {
     onSubmit: async (values) => {
       try {
         const response = await login(values);
+        localStorage.setItem("my-personal-workspace", response.token);
+        setAuth(values.userName)
+        navigate('/dashboard')
         console.log(response)
       } catch (error) {
         console.log(error)
       }
-
-
-
-      /* const userToLog = users.find((user) => user.userName === values.userName);
-      if (!userToLog || userToLog.pass !== values.password) {
-        setError(true);
-      } else {
-        localStorage.setItem("user", values.userName);
-        setAuth(userToLog.userName);
-
-        window.location.href = `/dashboard/`;
-      } */
     },
   });
 

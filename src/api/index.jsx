@@ -12,7 +12,7 @@ const axiosApi = axios.create({
 axiosApi.defaults.headers.common['Content-Type'] = 'application/json';
 
 axiosApi.interceptors.request.use(async (config) => {
-    const token = window.localStorage.getItem('my-personal-workspace').token
+    const token = window.localStorage.getItem('my-personal-workspace')
   
     const { headers } = config
     headers.Authorization = `Bearer ${token}`
