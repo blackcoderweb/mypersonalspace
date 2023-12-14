@@ -1,5 +1,4 @@
 import { Routes, Route, BrowserRouter } from "react-router-dom";
-import PublicLayout from "../layout/PublicLayout";
 import { Login } from "../pages/Authentication/Login";
 import { NotFound } from "../pages/NotFound/NotFound";
 import PrivateLayout from "../layout/PrivateLayout";

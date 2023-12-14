@@ -1,20 +1,15 @@
 import { useState } from "react";
 import PropTypes from "prop-types";
-import { useDispatch } from "react-redux";
-import { updateParentFolder } from "../features/fileSystem/fileSystemSlice";
-import { useFindChildren } from "../hooks/useFindChildren";
+import { JSONPath } from "jsonpath-plus";
 
 export const FolderNode = ({ folder, setSelectedFolder, selectedFolder, level = 1 }) => {
-  const dispatch = useDispatch();
+  
   const [expanded, setExpanded] = useState(false);
 
-  const handleUpdateParent = (parentId) => {
-    dispatch(updateParentFolder({ parentFolder: parentId }));
+  const handleExpanded = () => {
     setExpanded((prevExpanded) => !prevExpanded);
     setSelectedFolder(folder.id);
   };
-
-  const { folders } = useFindChildren(folder.id);
 
   return (
     <>
@@ -27,7 +22,7 @@ export const FolderNode = ({ folder, setSelectedFolder, selectedFolder, level = 
           alignItems: "center",
           paddingBottom: "0.5rem",
         }}
-        onClick={() => handleUpdateParent(folder.id)}
+        onClick={handleExpanded}
       >
         <div style={{ userSelect: "none", marginLeft: `${level * 2.5}rem` }}>
           <i
@@ -49,8 +44,8 @@ export const FolderNode = ({ folder, setSelectedFolder, selectedFolder, level = 
         </div>
       </div>
       {expanded &&
-        folders.length > 0 &&
-        folders.map((folder) => (
+        folder.children.length > 0 &&
+        folder.children.map((folder) => (
           <FolderNode
             key={folder.id}
             folder={folder}
@@ -67,4 +62,5 @@ FolderNode.propTypes = {
   folder: PropTypes.object,
   setSelectedFolder: PropTypes.func,
   selectedFolder: PropTypes.string,
+  level: PropTypes.number,
 };

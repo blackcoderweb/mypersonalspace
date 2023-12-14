@@ -4,11 +4,8 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Card from "react-bootstrap/Card";
 import Alert from "react-bootstrap/Alert";
-import { users } from "../../data/testData";
 import { useState } from "react";
-import useAuth from "../../hooks/useAuth";
 import { login } from "../../api/auth";
-import { useNavigate } from "react-router-dom";
 
 /*const validate = (values) => {
   const errors = {};
@@ -26,8 +23,6 @@ import { useNavigate } from "react-router-dom";
 export const Login = () => {
   const [error, setError] = useState(false);
   const [show, setShow] = useState(null);
-  const { setAuth } = useAuth();
-  const navigate = useNavigate();
 
   const formik = useFormik({
     initialValues: {
@@ -42,9 +37,8 @@ export const Login = () => {
       try {
         const response = await login(values);
         localStorage.setItem("my-personal-workspace", response.token);
-        setAuth(values.userName)
-        navigate('/dashboard')
-        console.log(response)
+        localStorage.setItem("user", values.userName);
+        location.href = "/dashboard";
       } catch (error) {
         console.log(error)
       }
