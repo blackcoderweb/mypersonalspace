@@ -16,12 +16,21 @@ const initialState = {
     },
   },
   parentFolder: "root.unidad",
+  rootFolders: [],
+  rootFiles: [],
+  childrenFiles: [],
 };
 
 const fileSystemSlice = createSlice({
   name: "fileSystem",
   initialState,
   reducers: {
+    setRootFolders: (state, action) => {
+      state.rootFolders = action.payload;
+    },
+    setRootFiles: (state, action) => {
+      state.rootFiles = action.payload;
+    },
     createFolder: (state, action) => {
       let { folderName, parentFolder, ext } = action.payload;
       if (folderName == "") {
@@ -276,6 +285,8 @@ const fileSystemSlice = createSlice({
 });
 
 export const {
+  setRootFolders,
+  setRootFiles,
   createFolder,
   changeFolderName,
   shareFolderFile,

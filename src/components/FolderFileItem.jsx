@@ -4,7 +4,6 @@ import { OptionsMenu } from "./OptionsMenu";
 
 export const FolderFileItem = ({ type, item, imageSrc }) => {
 
-  let currentFile = item.version ? item.version[item.version.length - 1] : undefined;
   return (
     <Card
   id="folderFileItem"
@@ -17,10 +16,10 @@ export const FolderFileItem = ({ type, item, imageSrc }) => {
     width: "100%",
   }}>
     <div style={{ overflow: 'hidden', textOverflow: 'ellipsis', fontSize:"15px" }}>
-      {type === "carpeta" ? item.name : currentFile.name}
+      {type === "carpeta" ? item.name : item.fileName}
     </div>
     <div>
-      <OptionsMenu type={type} name={type === "carpeta" ? item.name : currentFile.name} id={type === "carpeta" ? item.id : currentFile.id} fileParentId={item.id}/>
+      <OptionsMenu type={type} name={type === "carpeta" ? item.name : item.fileName} id={type === "carpeta" ? item.id : item.id} fileParentId={item.id}/>
     </div>
   </div>
   <Card.Img

@@ -3,15 +3,19 @@ import Card from "react-bootstrap/Card";
 import { FolderNode } from "./FolderNode";
 import { getFolders } from "../api/folders";
 import useAuth from "../hooks/useAuth";
-import { JSONPath } from "jsonpath-plus";
+import { useDispatch, useSelector } from "react-redux";
+import { setRootFolders } from "../features/fileSystem/fileSystemSlice";
 
 export const MainNode = () => {
+  const [mainUnit, setMainUnit] = useState({});
   const [expanded, setExpanded] = useState(false);
   const [selectedFolder, setSelectedFolder] = useState("");
 
-  const [foldersToRender, setFoldersToRender] = useState([]);
+  const dispatch = useDispatch();
 
   const { auth } = useAuth();
+
+  const rootFolders = useSelector((state) => state.fileSystem.rootFolders);
 
   const handleExpanded = () => {
     //When expanded, log the folders.
@@ -23,16 +27,11 @@ export const MainNode = () => {
   useEffect(() => {
     const fetchFolders = async () => {
       const resp = await getFolders();
-      setFoldersToRender(resp);
+      setMainUnit(resp)
+      dispatch(setRootFolders(resp.folder.children));
     };
     fetchFolders();
-  }, []);
-
-  //Buscar hijos de la carpeta raíz
-  const firstLevelFolders = JSONPath({
-    path: `$..children[?(@.parent == "${auth}")]`,
-    json: foldersToRender,
-  });
+  }, [dispatch]); 
 
   return (
     <>
@@ -62,8 +61,8 @@ export const MainNode = () => {
         </Card.Body>
       </div>
       {expanded &&
-        firstLevelFolders.length > 0 &&
-        firstLevelFolders.map((folder) => (
+        rootFolders.length > 0 &&
+        rootFolders.map((folder) => (
           <FolderNode
             key={folder.id}
             folder={folder}
