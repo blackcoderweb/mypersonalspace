@@ -1,6 +1,5 @@
 import { useState } from "react";
 import PropTypes from "prop-types";
-import { JSONPath } from "jsonpath-plus";
 
 export const FolderNode = ({ folder, setSelectedFolder, selectedFolder, level = 1 }) => {
   

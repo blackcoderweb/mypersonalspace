@@ -2,26 +2,27 @@ import { useEffect, useMemo, useState } from "react";
 import Card from "react-bootstrap/Card";
 import { FolderNode } from "./FolderNode";
 import { getFolders } from "../api/folders";
+import { getFiles } from "../api/files";
 import useAuth from "../hooks/useAuth";
 import { useDispatch, useSelector } from "react-redux";
-import { setRootFolders } from "../features/fileSystem/fileSystemSlice";
+import { setRootFiles, setRootFolders, setSelectedFolder } from "../features/fileSystem/fileSystemSlice";
 
 export const MainNode = () => {
   const [mainUnit, setMainUnit] = useState({});
   const [expanded, setExpanded] = useState(false);
-  const [selectedFolder, setSelectedFolder] = useState("");
 
   const dispatch = useDispatch();
 
   const { auth } = useAuth();
 
   const rootFolders = useSelector((state) => state.fileSystem.rootFolders);
+  const selectedFolder = useSelector((state) => state.fileSystem.selectedFolder);
 
   const handleExpanded = () => {
     //When expanded, log the folders.
     //When collapsed, hide the folders.
     expanded ? setExpanded(false) : setExpanded(true);
-    setSelectedFolder(auth);
+    dispatch(setSelectedFolder(auth));
   };
 
   useEffect(() => {
@@ -32,6 +33,14 @@ export const MainNode = () => {
     };
     fetchFolders();
   }, [dispatch]); 
+
+  useEffect(() => {
+    const fetchFiles = async () => {
+      const resp = await getFiles();
+      dispatch(setRootFiles(resp));
+    };
+    fetchFiles();
+  }, [dispatch]);
 
   return (
     <>

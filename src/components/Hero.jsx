@@ -3,24 +3,13 @@ import { FolderModal } from "./FolderModal";
 import { FileModal } from "./FileModal";
 import { Row, Col } from "react-bootstrap";
 import { FolderFileItem } from "./FolderFileItem";
-import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
-import { getFiles } from "../api/files";
-import { setRootFiles } from "../features/fileSystem/fileSystemSlice";
+import { useFindChildren } from "../hooks/useFindChildren";
+import { useSelector } from "react-redux";
 
 export const Hero = () => {
 
-  const dispatch = useDispatch();
-  const rootFolders = useSelector((state) => state.fileSystem.rootFolders);
-  const rootFiles = useSelector((state) => state.fileSystem.rootFiles);
-
-  useEffect(() => {
-    const fetchFiles = async () => {
-      const resp = await getFiles();
-      dispatch(setRootFiles(resp));
-    };
-    fetchFiles();
-  }, [dispatch]);
+  const selectedFolder = useSelector((state) => state.fileSystem.selectedFolder);
+  const {files, folders} = useFindChildren(selectedFolder);
 
   return (
     <Card
@@ -52,12 +41,12 @@ export const Hero = () => {
         </Col>
       </Row>
       <section id="folders-files" className="pt-5" style={{ width: "95%" }}>
-        {rootFolders.length > 0 && (
+        {folders.length > 0 && (
           <>
             <h5>Carpetas</h5>
             <hr />
             <Row xs={2} md={6} className="g-2">
-              {rootFolders.map((folder) => (
+              {folders.map((folder) => (
                 <FolderFileItem
                   key={folder.id}
                   type="carpeta"
@@ -68,13 +57,13 @@ export const Hero = () => {
             </Row>
           </>
         )}
-        {rootFiles.length > 0 && (
+        {files.length > 0 && (
           <>
             <h5 className="pt-5">Archivos</h5>
             <hr />
             <Row xs={2} md={6} className="g-2 pb-5">
-              {rootFiles &&
-                rootFiles.map((file) => (
+              {files &&
+                files.map((file) => (
                   <FolderFileItem
                     key={file.id}
                     type="archivo"
