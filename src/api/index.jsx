@@ -12,7 +12,7 @@ const axiosApi = axios.create({
 axiosApi.defaults.headers.common['Content-Type'] = 'application/json';
 
 axiosApi.interceptors.request.use(async (config) => {
-    const token = window.localStorage.getItem('my-personal-workspace')
+    const token = window.localStorage.getItem('token-my-personal-workspace')
   
     const { headers } = config
     headers.Authorization = `Bearer ${token}`
@@ -32,7 +32,7 @@ axiosApi.interceptors.response.use(
 			error.response.status === 403 ||
 			error.response.status === 401
 		) {
-            localStorage.removeItem('my-personal-workspace')
+            localStorage.removeItem('token-my-personal-workspace')
 			redirect('/');
 		} else {
 			return Promise.reject(error);

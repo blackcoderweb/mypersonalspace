@@ -6,6 +6,8 @@ import { useEffect, useState } from "react";
 
 export const useFindChildren = (selectedFolder) => {
   const { auth } = useAuth();
+
+  const mainUnit = useSelector((state) => state.fileSystem.mainUnit);
   const rootFolders = useSelector((state) => state.fileSystem.rootFolders);
   const rootFiles = useSelector((state) => state.fileSystem.rootFiles);
 
@@ -17,18 +19,24 @@ export const useFindChildren = (selectedFolder) => {
       setFiles(rootFiles);
       setFolders(rootFolders);
     } else {
-      const parent = JSONPath({ path: `$.folder[?(@.id==${selectedFolder})]`, json: rootFolders });
-      setFolders(parent[0].children);
+      const parent = JSONPath({
+        path: `$..children[?(@.id=="${selectedFolder}")]`,
+        json: mainUnit,
+      });
 
-      getFilesByFolder(selectedFolder)
-        .then((result) => {
-          setFiles(result);
-        })
-        .catch((error) => {
-          console.error('Hubo un error al obtener los archivos:', error);
-        });
+      if (parent.length > 0) {
+        setFolders(parent[0].children);
+      } else {
+        setFolders([]);
+      }
+
+      const fetchFiles = async () => {
+        const resp = await getFilesByFolder(selectedFolder);
+        setFiles(resp);
+      };
+      fetchFiles();
     }
-  }, [auth, rootFiles, rootFolders, selectedFolder]);
+  }, [selectedFolder, auth, rootFiles, rootFolders, mainUnit]);
 
   return { files, folders };
 };

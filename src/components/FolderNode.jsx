@@ -1,13 +1,17 @@
 import { useState } from "react";
 import PropTypes from "prop-types";
+import { useDispatch, useSelector } from "react-redux";
+import { setSelectedFolder } from "../features/fileSystem/fileSystemSlice";
 
-export const FolderNode = ({ folder, setSelectedFolder, selectedFolder, level = 1 }) => {
+export const FolderNode = ({ folder, level = 1 }) => {
   
   const [expanded, setExpanded] = useState(false);
+  const dispatch = useDispatch();
+  const selectedFolder = useSelector((state) => state.fileSystem.selectedFolder);
 
   const handleExpanded = () => {
     setExpanded((prevExpanded) => !prevExpanded);
-    setSelectedFolder(folder.id);
+    dispatch(setSelectedFolder(folder.id));
   };
 
   return (
@@ -48,8 +52,6 @@ export const FolderNode = ({ folder, setSelectedFolder, selectedFolder, level = 
           <FolderNode
             key={folder.id}
             folder={folder}
-            setSelectedFolder={setSelectedFolder}
-            selectedFolder={selectedFolder}
             level={level + 0.8}
           />
         ))}

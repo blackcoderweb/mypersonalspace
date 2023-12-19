@@ -11,7 +11,7 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const authUser = async () => {
-    const user = localStorage.getItem("user");
+    const user = localStorage.getItem("user-my-personal-workspace");
 
     //Comprobar si tengo el nombre de usuario
     if (!user) {

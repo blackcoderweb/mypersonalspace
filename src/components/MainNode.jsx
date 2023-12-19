@@ -5,10 +5,9 @@ import { getFolders } from "../api/folders";
 import { getFiles } from "../api/files";
 import useAuth from "../hooks/useAuth";
 import { useDispatch, useSelector } from "react-redux";
-import { setRootFiles, setRootFolders, setSelectedFolder } from "../features/fileSystem/fileSystemSlice";
+import { setMainUnit, setRootFiles, setRootFolders, setSelectedFolder } from "../features/fileSystem/fileSystemSlice";
 
 export const MainNode = () => {
-  const [mainUnit, setMainUnit] = useState({});
   const [expanded, setExpanded] = useState(false);
 
   const dispatch = useDispatch();
@@ -28,7 +27,7 @@ export const MainNode = () => {
   useEffect(() => {
     const fetchFolders = async () => {
       const resp = await getFolders();
-      setMainUnit(resp)
+      dispatch(setMainUnit(resp));
       dispatch(setRootFolders(resp.folder.children));
     };
     fetchFolders();
@@ -75,8 +74,6 @@ export const MainNode = () => {
           <FolderNode
             key={folder.id}
             folder={folder}
-            setSelectedFolder={setSelectedFolder}
-            selectedFolder={selectedFolder}
           />
         ))}
     </>

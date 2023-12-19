@@ -5,6 +5,8 @@ import { JSONPath } from "jsonpath-plus";
 import { parentFileIndex } from "../../helpers/parentFileIndex";
 import { findUser } from "../../helpers/findUser";
 import { users } from "../../data/testData";
+import { create } from "../../api/folders";
+import { CREATE_FOLDER } from "../../api/url";
 
 const initialState = {
   fileSystemItems: {
@@ -16,6 +18,7 @@ const initialState = {
     },
   },
   parentFolder: "root.unidad",
+  mainUnit: {},
   rootFolders: [],
   rootFiles: [],
   selectedFolder: "",
@@ -25,6 +28,9 @@ const fileSystemSlice = createSlice({
   name: "fileSystem",
   initialState,
   reducers: {
+    setMainUnit: (state, action) => {
+      state.mainUnit = action.payload;
+    },
     setRootFolders: (state, action) => {
       state.rootFolders = action.payload;
     },
@@ -35,44 +41,51 @@ const fileSystemSlice = createSlice({
       state.selectedFolder = action.payload;
     },
     createFolder: (state, action) => {
-      let { folderName, parentFolder, ext } = action.payload;
+      let { folderName, parentFolderId } = action.payload;
+
       if (folderName == "") {
         folderName = "Nueva carpeta";
       }
-      const folder = {
-        id: uuidv4(),
-        name: folderName,
-        share: [],
-        files: [],
-        folders: [],
+
+      let folder = {
+        folderName: folderName,
+        parent: "",
       };
+
+      const token = localStorage.getItem("token-my-personal-workspace");
       //Cuando quiero crear una carpeta en la unidad principal
-      if (parentFolder == "root.unidad") {
-        let folders = state.fileSystemItems.root.unidad.folders;
-        if (folders.length == 0) {
-          state.fileSystemItems.root.unidad.folders.push(folder);
-        } else {
-          if (existingName(folders, folderName, ext)) {
-            alert("Ya existe una carpeta con este nombre en esta ubicación");
-          } else {
-            state.fileSystemItems.root.unidad.folders.push(folder);
-          }
+      const root = localStorage.getItem("user-my-personal-workspace");
+      if (parentFolderId === root) {
+        folder.parent = root;
+        try {
+          const createFolder = async () => {
+            const resp = await create(folder, {
+              headers: {
+                Authorization: token,
+              },
+            });
+          };
+          createFolder();
+        } catch (error) {
+          console.log(error);
         }
       } else {
-        //Cuando quiero crear una carpeta en una carpeta que no es la unidad principal, busco su padre por el id usando jsonpath-plus
-        let parent = JSONPath({
-          path: `$..folders[?(@.id=='${parentFolder}')]`,
-          json: state.fileSystemItems,
+        let parentFolder = JSONPath({
+          path: `$..children[?(@.id=='${parentFolderId}')]`,
+          json: state.mainUnit,
         });
-        //Si el padre existe, busco si ya existe una carpeta con el mismo nombre
-        if (parent.length > 0) {
-          if (existingName(parent[0].folders, folderName, ext)) {
-            alert("Ya existe una carpeta con este nombre en esta ubicación");
-          } else {
-            parent[0].folders.push(folder);
-          }
-        } else {
-          alert("No se pudo crear la carpeta");
+        folder.parent = parentFolder[0].name;
+        try {
+          const createFolder = async () => {
+            const resp = await create(folder, {
+              headers: {
+                Authorization: token,
+              },
+            });
+          };
+          createFolder();
+        } catch (error) {
+          console.log(error);
         }
       }
     },
@@ -85,7 +98,7 @@ const fileSystemSlice = createSlice({
       //Busco la carpeta por el id usando jsonpath-plus
       let folder = JSONPath({
         path: `$..folders[?(@.id=='${folderId}')]`,
-        json: state.fileSystemItems,
+        json: state.mainUnit,
       });
       //Cuando quiero cambiar el nombre de una carpeta en la unidad principal
       if (parentFolder == "root.unidad") {
@@ -118,13 +131,14 @@ const fileSystemSlice = createSlice({
       }
     },
     shareFolderFile: (state, action) => {
-      let {type, id, userName, permission, parentFolder, fileParentId } = action.payload;
+      let { type, id, userName, permission, parentFolder, fileParentId } =
+        action.payload;
       let shared = {
         user: userName,
         permissions: permission,
-      }
-      if (findUser(users, userName)){
-        if(type === "carpeta"){
+      };
+      if (findUser(users, userName)) {
+        if (type === "carpeta") {
           //Si el padre es la unidad principal
           if (parentFolder == "root.unidad") {
             let folders = state.fileSystemItems.root.unidad.folders;
@@ -132,7 +146,7 @@ const fileSystemSlice = createSlice({
             let index = folders.findIndex((folder) => folder.id === id);
             //En la propiedad share de la carpeta que quiero compartir, agrego el usuario con sus permisos
             folders[index].share.push(shared);
-          }else{
+          } else {
             //Si el padre no es la unidad principal
             //Busco el padre de la carpeta por el id usando jsonpath-plus
             let parent = JSONPath({
@@ -140,11 +154,13 @@ const fileSystemSlice = createSlice({
               json: state.fileSystemItems,
             });
             //Busco el índice de la carpeta que quiero compartir
-            let index = parent[0].folders.findIndex((folder) => folder.id === id);
+            let index = parent[0].folders.findIndex(
+              (folder) => folder.id === id
+            );
             //En la propiedad share de la carpeta que quiero compartir, agrego el usuario con sus permisos
             parent[0].folders[index].share.push(shared);
           }
-        }else{
+        } else {
           //Si el archivo está en la unidad principal
           if (parentFolder == "root.unidad") {
             let files = state.fileSystemItems.root.unidad.files;
@@ -152,22 +168,23 @@ const fileSystemSlice = createSlice({
             let index = files.findIndex((file) => file.id === fileParentId);
             //En la propiedad share del archivo que quiero compartir, agrego el usuario con sus permisos
             files[index].share.push(shared);
-          }else{
+          } else {
             //Si el archivo que quiero compartir no está en la unidad principal, busco su padre por el id usando jsonpath-plus
             let parent = JSONPath({
               path: `$..folders[?(@.id=='${parentFolder}')]`,
               json: state.fileSystemItems,
             });
             //Busco el índice del archivo que quiero compartir
-            let index = parent[0].files.findIndex((file) => file.id === fileParentId);
+            let index = parent[0].files.findIndex(
+              (file) => file.id === fileParentId
+            );
             //En la propiedad share del archivo que quiero compartir, agrego el usuario con sus permisos
             parent[0].files[index].share.push(shared);
           }
         }
-      }else{
-        alert("No existe un usuario con ese nombre")
+      } else {
+        alert("No existe un usuario con ese nombre");
       }
-      
     },
     deleteFolderFile: (state, action) => {
       let { id, parent, type } = action.payload;
@@ -288,6 +305,7 @@ const fileSystemSlice = createSlice({
 });
 
 export const {
+  setMainUnit,
   setRootFolders,
   setRootFiles,
   setSelectedFolder,

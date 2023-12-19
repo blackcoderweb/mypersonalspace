@@ -36,8 +36,8 @@ export const Login = () => {
     onSubmit: async (values) => {
       try {
         const response = await login(values);
-        localStorage.setItem("my-personal-workspace", response.token);
-        localStorage.setItem("user", values.userName);
+        localStorage.setItem("token-my-personal-workspace", response.token);
+        localStorage.setItem("user-my-personal-workspace", values.userName);
         location.href = "/dashboard";
       } catch (error) {
         console.log(error)

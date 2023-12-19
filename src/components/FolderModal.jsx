@@ -6,13 +6,14 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   changeFolderName,
   createFolder,
+  setSelectedFolder,
   updateParentFolder,
 } from "../features/fileSystem/fileSystemSlice";
 import propTypes from "prop-types";
 
 export const FolderModal = ({ action, title, label, buttonText, id }) => {
   const dispatch = useDispatch();
-  const parentFolder = useSelector((state) => state.fileSystem.parentFolder);
+  const selectedFolder = useSelector((state) => state.fileSystem.selectedFolder);
   const [show, setShow] = useState(false);
   const [folderName, setFolderName] = useState("");
 
@@ -21,13 +22,12 @@ export const FolderModal = ({ action, title, label, buttonText, id }) => {
 
   const handleSubmitCreateFolder = (e) => {
     e.preventDefault();
-    dispatch(createFolder({ folderName, parentFolder, ext: false }));
-    dispatch(updateParentFolder({ parentFolder: parentFolder }));
+    dispatch(createFolder({ folderName, parentFolderId: selectedFolder }));
     setShow(false);
   };
   const handleCreateFolder = () => {
-    dispatch(createFolder({ folderName, parentFolder, ext: false }));
-    dispatch(updateParentFolder({ parentFolder: parentFolder }));
+    dispatch(createFolder({ folderName, parentFolderId: selectedFolder }));
+    dispatch(setSelectedFolder(selectedFolder));
     setShow(false);
   };
 
