@@ -9,6 +9,8 @@ import {
   uploadFile,
 } from "../features/fileSystem/fileSystemSlice";
 import PropTypes from "prop-types";
+import { upoloadFile } from "../api/files";
+import { JSONPath } from "jsonpath-plus";
 
 export const FileModal = ({fileParentId, action, title, label }) => {
   const [show, setShow] = useState(false);
@@ -16,21 +18,34 @@ export const FileModal = ({fileParentId, action, title, label }) => {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
+  const [file, setFile] = useState('')
   const [selectedFile, setSelectedFile] = useState("");
   const [fileUrl, setFileUrl] = useState("");
   const [tags, setTags] = useState("");
 
   const dispatch = useDispatch();
-  const parentFolder = useSelector((state) => state.fileSystem.parentFolder);
-
-  const handleUploadFile = () => {
-    if (selectedFile) {
-      dispatch(
-        uploadFile({ selectedFile, fileUrl, tags, parentFolder, ext: true })
-      );
-      dispatch(updateParentFolder({ parentFolder: parentFolder }));
-      setShow(false);
-      setSelectedFile("");
+  const { parentFolder, selectedFolder, mainUnit } = useSelector((state) => state.fileSystem)
+  const handleUploadFile = async () => {
+    // if (selectedFile) {
+    //   dispatch(
+    //     uploadFile({ selectedFile, fileUrl, tags, parentFolder, ext: true })
+    //   );
+    //   dispatch(updateParentFolder({ parentFolder: parentFolder }));
+    //   setShow(false);
+    //   setSelectedFile("");
+    // }
+    const fData = new FormData()
+    fData.append('formFile', file)
+    const result = JSONPath({
+      path: `$..children[?(@.id=='${selectedFolder}')]`,
+      json: mainUnit,
+    })
+    console.log(result)
+    try {
+      const response = await upoloadFile(selectedFolder, result[0].fullPath, fData)
+      console.log(response)
+    } catch (error) {
+      console.log(error)
     }
   };
 
@@ -74,6 +89,7 @@ export const FileModal = ({fileParentId, action, title, label }) => {
               <Form.Control
                 type="file"
                 onChange={(e) => {
+                  setFile(e.target.files[0])
                   setSelectedFile(e.target.files[0]["name"]);
                   setFileUrl(e.target.value);
                 }}
