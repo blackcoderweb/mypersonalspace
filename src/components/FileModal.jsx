@@ -6,7 +6,6 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   updateFileVersion,
   updateParentFolder,
-  uploadFile,
 } from "../features/fileSystem/fileSystemSlice";
 import PropTypes from "prop-types";
 import { upoloadFile } from "../api/files";
@@ -34,15 +33,14 @@ export const FileModal = ({fileParentId, action, title, label }) => {
     //   setShow(false);
     //   setSelectedFile("");
     // }
-    const fData = new FormData()
-    fData.append('formFile', file)
     const result = JSONPath({
       path: `$..children[?(@.id=='${selectedFolder}')]`,
       json: mainUnit,
     })
-    console.log(result)
     try {
-      const response = await upoloadFile(selectedFolder, result[0].fullPath, fData)
+      const formData = new FormData();
+      formData['formFile'] = file
+      const response = await upoloadFile(selectedFolder, result[0].fullPath, formData)
       console.log(response)
     } catch (error) {
       console.log(error)
