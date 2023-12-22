@@ -4,10 +4,8 @@ import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  changeFolderName,
   createFolder,
   setSelectedFolder,
-  updateParentFolder,
 } from "../features/fileSystem/fileSystemSlice";
 import propTypes from "prop-types";
 
@@ -32,15 +30,13 @@ export const FolderModal = ({ action, title, label, buttonText, id }) => {
   };
 
   const handleUpdateFolder = () => {
-    dispatch(changeFolderName({folderId:id, newFolderName: folderName, parentFolder, ext: false}));
-    dispatch(updateParentFolder({ parentFolder: parentFolder }));
+    dispatch(changeFolderName({folderId:id, newFolderName: folderName, ext: false}));
     setShow(false);
   };
 
   const handleSubmitUpdateFolder = (e) => {
     e.preventDefault();
-    dispatch(changeFolderName({folderId:id, newFolderName: folderName, parentFolder, ext: false}));
-    dispatch(updateParentFolder({ parentFolder: parentFolder }));
+    dispatch(changeFolderName({folderId:id, newFolderName: folderName, ext: false}));
     setShow(false);
   };
 

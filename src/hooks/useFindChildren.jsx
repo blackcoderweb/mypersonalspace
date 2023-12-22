@@ -7,9 +7,7 @@ import { useEffect, useState } from "react";
 export const useFindChildren = (selectedFolder) => {
   const { auth } = useAuth();
 
-  const mainUnit = useSelector((state) => state.fileSystem.mainUnit);
-  const rootFolders = useSelector((state) => state.fileSystem.rootFolders);
-  const rootFiles = useSelector((state) => state.fileSystem.rootFiles);
+  const {mainUnit, rootFolders, rootFiles} = useSelector((state) => state.fileSystem);
 
   const [files, setFiles] = useState([]);
   const [folders, setFolders] = useState([]);
@@ -36,7 +34,7 @@ export const useFindChildren = (selectedFolder) => {
       };
       fetchFiles();
     }
-  }, [selectedFolder, auth, rootFiles, rootFolders, mainUnit]);
+  }, [selectedFolder, auth, mainUnit, rootFiles, rootFolders]);
 
   return { files, folders };
 };

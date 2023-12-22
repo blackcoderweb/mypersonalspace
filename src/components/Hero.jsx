@@ -7,9 +7,11 @@ import { useFindChildren } from "../hooks/useFindChildren";
 import { useSelector } from "react-redux";
 
 export const Hero = () => {
+  const selectedFolder = useSelector(
+    (state) => state.fileSystem.selectedFolder
+  );
 
-  const selectedFolder = useSelector((state) => state.fileSystem.selectedFolder);
-  const {files, folders} = useFindChildren(selectedFolder);
+  const { files, folders } = useFindChildren(selectedFolder);
 
   return (
     <Card
@@ -23,7 +25,7 @@ export const Hero = () => {
         paddingTop: "3rem",
       }}
     >
-      <Row className="d-flex gap-1">
+      <Row className="d-flex gap-1 pb-2">
         <Col xm={6}>
           <FolderModal
             action="create"
@@ -40,11 +42,29 @@ export const Hero = () => {
           />
         </Col>
       </Row>
-      <section id="folders-files" className="pt-5" style={{ width: "95%" }}>
+      <section
+        id="folders-section"
+        style={{
+          width: "95%",
+          height: "35vh",
+          overflowY: "auto",
+          overflowX: "hidden",
+        }}
+      >
         {folders.length > 0 && (
           <>
-            <h5>Carpetas</h5>
-            <hr />
+            <div
+              style={{
+                position: "sticky",
+                top: 0,
+                backgroundColor: "#f8f9fa",
+                zIndex: "1",
+              }}
+            >
+              <h5>Carpetas</h5>
+              <hr />
+            </div>
+
             <Row xs={2} md={6} className="g-2">
               {folders.map((folder) => (
                 <FolderFileItem
@@ -57,10 +77,23 @@ export const Hero = () => {
             </Row>
           </>
         )}
+      </section>
+      <section id="files-section" style={{ width: "95%", height: "35vh" }}>
         {files.length > 0 && (
           <>
-            <h5 className="pt-5">Archivos</h5>
-            <hr />
+            <div
+              className="pt-3"
+              style={{
+                position: "sticky",
+                top: 0,
+                backgroundColor: "#f8f9fa",
+                zIndex: "1",
+              }}
+            >
+              <h5>Archivos</h5>
+              <hr />
+            </div>
+
             <Row xs={2} md={6} className="g-2 pb-5">
               {files &&
                 files.map((file) => (

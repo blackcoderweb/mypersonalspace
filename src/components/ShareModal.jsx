@@ -3,8 +3,7 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
 import PropTypes from "prop-types";
-import { useDispatch, useSelector } from "react-redux";
-import { shareFolderFile } from "../features/fileSystem/fileSystemSlice";
+//import { useDispatch, useSelector } from "react-redux";
 
 export const ShareModal = ({ type, name, id, fileParentId }) => {
   const [show, setShow] = useState(false);
@@ -12,15 +11,13 @@ export const ShareModal = ({ type, name, id, fileParentId }) => {
   const [error, setError] = useState(false);
   const [escrituraChecked, setEscrituraChecked] = useState(false);
 
-  const parentFolder = useSelector((state) => state.fileSystem.parentFolder);
-
-  const dispatch = useDispatch();
+  //const dispatch = useDispatch();
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
   const handleShareFolder = () => {
-    if (userName === "") {
+    {/*if (userName === "") {
       setError(true);
     } else {
       dispatch(
@@ -34,11 +31,11 @@ export const ShareModal = ({ type, name, id, fileParentId }) => {
       );
       setError(false);
       setShow(false);
-    }
+    }*/}
   };
 
   const handleShareFile = () => {
-    if (userName === "") {
+    {/*if (userName === "") {
       setError(true);
     } else {
       dispatch(
@@ -53,7 +50,7 @@ export const ShareModal = ({ type, name, id, fileParentId }) => {
       );
       setError(false);
       setShow(false);
-    }
+    }*/}
   };
 
   //Para evitar que se envíe el formulario al presionar enter

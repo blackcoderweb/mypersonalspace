@@ -14,8 +14,7 @@ export const MainNode = () => {
 
   const { auth } = useAuth();
 
-  const rootFolders = useSelector((state) => state.fileSystem.rootFolders);
-  const selectedFolder = useSelector((state) => state.fileSystem.selectedFolder);
+  const { rootFolders, selectedFolder } = useSelector((state) => state.fileSystem);
 
   const handleExpanded = () => {
     //When expanded, log the folders.

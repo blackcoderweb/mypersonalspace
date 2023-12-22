@@ -1,10 +1,11 @@
-import { MainNode } from './MainNode';
+import { MainNode } from "./MainNode";
 
 export const Aside = () => {
-  
-  
   return (
-    <div id='aside' style={{ width: "20rem", height: '90vh'}}>
+    <div
+      id="aside"
+      style={{ width: "20rem", maxHeight: "90vh", overflow: "auto" }}
+    >
       <MainNode />
     </div>
   );

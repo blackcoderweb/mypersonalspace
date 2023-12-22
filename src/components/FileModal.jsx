@@ -3,11 +3,6 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  updateFileVersion,
-  updateParentFolder,
-  uploadFile,
-} from "../features/fileSystem/fileSystemSlice";
 import PropTypes from "prop-types";
 
 export const FileModal = ({fileParentId, action, title, label }) => {
@@ -25,10 +20,6 @@ export const FileModal = ({fileParentId, action, title, label }) => {
 
   const handleUploadFile = () => {
     if (selectedFile) {
-      dispatch(
-        uploadFile({ selectedFile, fileUrl, tags, parentFolder, ext: true })
-      );
-      dispatch(updateParentFolder({ parentFolder: parentFolder }));
       setShow(false);
       setSelectedFile("");
     }
@@ -36,11 +27,6 @@ export const FileModal = ({fileParentId, action, title, label }) => {
 
   const handleUpdateFileVersion = () => {
     if (selectedFile) {
-      dispatch(
-        updateFileVersion({ fileParentId:fileParentId, fileUrl, selectedFile: selectedFile, tags, parentFolder: parentFolder })
-      );
-      dispatch(updateParentFolder({ parentFolder: parentFolder }));
-      setShow(false);
       setSelectedFile("");
     }
   };

@@ -4,7 +4,7 @@ import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
 import PropTypes from "prop-types";
 import { useDispatch, useSelector } from "react-redux";
-import { shareFolderFile } from "../features/fileSystem/fileSystemSlice";
+//import { shareFolderFile } from "../features/fileSystem/fileSystemSlice";
 
 export const EditPermitsModal = ({ type, name, id, fileParentId }) => {
   const [show, setShow] = useState(false);
@@ -23,7 +23,7 @@ export const EditPermitsModal = ({ type, name, id, fileParentId }) => {
   const handleShow = () => setShow(true);
 
   const handleChangeFolderPermits = () => {
-    if (userName === "") {
+    {/*if (userName === "") {
       setError(true);
     } else {
       dispatch(
@@ -37,11 +37,11 @@ export const EditPermitsModal = ({ type, name, id, fileParentId }) => {
       );
       setError(false);
       setShow(false);
-    }
+    }*/}
   };
 
   const handleChangeFilePermits = () => {
-    if (userName === "") {
+    {/*if (userName === "") {
       setError(true);
     } else {
       dispatch(
@@ -56,7 +56,7 @@ export const EditPermitsModal = ({ type, name, id, fileParentId }) => {
       );
       setError(false);
       setShow(false);
-    }
+    }*/}
   };
 
   //Para evitar que se envíe el formulario al presionar enter

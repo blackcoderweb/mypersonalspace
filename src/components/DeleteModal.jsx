@@ -2,7 +2,6 @@ import { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { useDispatch, useSelector } from 'react-redux';
-import { deleteFolderFile } from '../features/fileSystem/fileSystemSlice';
 import PropTypes from 'prop-types';
 
 export const DeleteModal = ({type, name, id, fileParentId}) => {
@@ -16,12 +15,12 @@ export const DeleteModal = ({type, name, id, fileParentId}) => {
   const dispatch = useDispatch();
 
   const handleDeleteFolder = () => {
-    dispatch(deleteFolderFile({type: "folder", id: id, parent: parentFolder}));
+    //dispatch(deleteFolderFile({type: "folder", id: id, parent: parentFolder}));
     setShow(false);
   }
 
   const handleDeleteFile = () => {
-    dispatch(deleteFolderFile({type: "file", id: fileParentId, parent: parentFolder}))
+    //dispatch(deleteFolderFile({type: "file", id: fileParentId, parent: parentFolder}))
     setShow(false);
   }
 
