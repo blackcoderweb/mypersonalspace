@@ -18,7 +18,7 @@ axiosApi.interceptors.request.use(async (config) => {
     headers.Authorization = `Bearer ${token}`
   
     return { ...config, headers }
-  })
+})
 
 axiosApi.interceptors.response.use(
 	(response) => response,
@@ -63,3 +63,47 @@ export async function del(url, config = {}) {
 		.delete(url, { ...config })
 		.then((response) => response.data);
 }
+
+
+const axiosApiFile = axios.create({
+	baseURL: API_URL,
+});
+
+axiosApiFile.interceptors.request.use(async (config) => {
+    const token = window.localStorage.getItem('token-my-personal-workspace')
+  
+    const { headers } = config
+    headers.Authorization = `Bearer ${token}`
+	headers['Content-Type'] = 'multipart/form-data'
+  
+    return { ...config, headers }
+})
+
+axiosApiFile.interceptors.response.use(
+	(response) => response,
+	(error) => {
+		if (error.code === 'ERR_NETWORK') {
+			console.log('no internet')
+			return Promise.reject(error);
+		} else if (
+			error.response.status === 403 ||
+			error.response.status === 401
+		) {
+            localStorage.removeItem('token-my-personal-workspace')
+			redirect('/');
+		} else {
+			return Promise.reject(error);
+		}
+	}
+);
+
+export async function postFile(url, data, ) {
+	return axiosApiFile.post(url, { ...data }, { 
+			headers: {
+				"Content-Type": "multipart/form-data"
+			}
+	})
+ .then(response => response.data);
+  }
+
+  
