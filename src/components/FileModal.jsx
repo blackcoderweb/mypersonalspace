@@ -3,6 +3,10 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
 import { useDispatch, useSelector } from "react-redux";
+import {
+  updateFileVersion,
+  updateParentFolder,
+} from "../features/fileSystem/fileSystemSlice";
 import PropTypes from "prop-types";
 import { upoloadFile } from "../api/files";
 import { JSONPath } from "jsonpath-plus";
@@ -19,14 +23,6 @@ export const FileModal = ({fileParentId, action, title, label }) => {
   const [tags, setTags] = useState("");
 
   const dispatch = useDispatch();
-<<<<<<< HEAD
-  const parentFolder = useSelector((state) => state.fileSystem.parentFolder);
-
-  const handleUploadFile = () => {
-    if (selectedFile) {
-      setShow(false);
-      setSelectedFile("");
-=======
   const { parentFolder, selectedFolder, mainUnit } = useSelector((state) => state.fileSystem)
   const handleUploadFile = async () => {
     // if (selectedFile) {
@@ -37,19 +33,17 @@ export const FileModal = ({fileParentId, action, title, label }) => {
     //   setShow(false);
     //   setSelectedFile("");
     // }
-    const fData = new FormData()
-    fData.append('formFile', file)
     const result = JSONPath({
       path: `$..children[?(@.id=='${selectedFolder}')]`,
       json: mainUnit,
     })
-    console.log(result)
     try {
-      const response = await upoloadFile(selectedFolder, result[0].fullPath, fData)
+      const formData = new FormData();
+      formData['formFile'] = file
+      const response = await upoloadFile(selectedFolder, result[0].fullPath, formData)
       console.log(response)
     } catch (error) {
       console.log(error)
->>>>>>> acb215db828e198a7f84cdded2d7eda529c7f02c
     }
   };
 

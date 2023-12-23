@@ -97,13 +97,8 @@ axiosApiFile.interceptors.response.use(
 	}
 );
 
-export async function postFile(url, data, ) {
-	return axiosApiFile.post(url, { ...data }, { 
-			headers: {
-				"Content-Type": "multipart/form-data"
-			}
-	})
- .then(response => response.data);
+export async function postFile(url, data) {
+	return axiosApiFile.post(url, { ...data }).then(response => response.data);
   }
 
   
