@@ -1,9 +1,10 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { JSONPath } from "jsonpath-plus";
-import { create } from "../../api/folders";
+import { createFolder } from "../../api/folders";
+import { uploadFile } from "../../api/files";
 
-export const createFolder = createAsyncThunk(
-  'fileSystem/createFolder',
+export const createFolderThunk = createAsyncThunk(
+  "fileSystem/createFolderThunk",
   async (folderData, { getState }) => {
     let { folderName, parentFolderId } = folderData;
 
@@ -17,10 +18,10 @@ export const createFolder = createAsyncThunk(
     };
 
     const token = localStorage.getItem("token-my-personal-workspace");
-    const root = localStorage.getItem("user-my-personal-workspace");
+
     // Si estoy creando el folder en la raiz
-    if (parentFolderId === root) {
-      folder.parent = root;
+    if (parentFolderId === user) {
+      folder.parent = user;
     } else {
       let parentFolder = JSONPath({
         path: `$..children[?(@.id=='${parentFolderId}')]`,
@@ -30,7 +31,7 @@ export const createFolder = createAsyncThunk(
     }
 
     try {
-      const resp = await create(folder, {
+      const resp = await createFolder(folder, {
         headers: {
           Authorization: token,
         },
@@ -38,6 +39,44 @@ export const createFolder = createAsyncThunk(
       return resp; // El resultado de esta promesa se manejará en el extraReducer
     } catch (error) {
       console.log(error);
+    }
+  }
+);
+
+export const uploadFileThunk = createAsyncThunk(
+  "fileSystem/uploadFileThunk",
+  async (fileData, { getState, dispatch }) => {
+    let { formData, parentFolderId } = fileData;
+
+    if (parentFolderId === user) {
+      try {
+        const response = await uploadFile(
+          parentFolderId,
+          getState().fileSystem.mainUnit.folder.fullPath,
+          formData
+        );
+        dispatch(addFileRoot(response));
+        console.log(response);
+        
+      } catch (error) {
+        console.log(error);
+      }
+    } else {
+      const result = JSONPath({
+        path: `$..children[?(@.id=='${parentFolderId}')]`,
+        json: getState().fileSystem.mainUnit,
+      });
+      try {
+        const response = await uploadFile(
+          parentFolderId,
+          result[0].fullPath,
+          formData
+        );
+        //Ejecutar método getFilesByFolderId para actualizar el estado
+        console.log(response);
+      } catch (error) {
+        console.log(error);
+      }
     }
   }
 );
@@ -56,7 +95,7 @@ const fileSystemSlice = createSlice({
   initialState,
   reducers: {
     setMainUnit: (state, action) => {
-      state.mainUnit = (action.payload);
+      state.mainUnit = action.payload;
     },
     setRootFolders: (state, action) => {
       state.rootFolders = action.payload;
@@ -67,23 +106,19 @@ const fileSystemSlice = createSlice({
     setSelectedFolder: (state, action) => {
       state.selectedFolder = action.payload;
     },
-    
+    addFileRoot: (state, action) => {
+      state.rootFiles.push(action.payload);
+    },
   },
   extraReducers: (builder) => {
-    builder
-      .addCase(createFolder.fulfilled, (state, action) => {
-        // manejar el estado de éxito y añadir la carpeta al estado
-        //console.log(action.payload);
-        state.mainUnit = action.payload;
-        state.rootFolders = action.payload.children;
-      });
+    builder.addCase(createFolderThunk.fulfilled, (state, action) => {
+      // manejar el estado de éxito y añadir la carpeta al estado
+      state.mainUnit = action.payload;
+      state.rootFolders = action.payload.children;
+    });
   },
 });
 
-export const {
-  setMainUnit,
-  setRootFolders,
-  setRootFiles,
-  setSelectedFolder,
-} = fileSystemSlice.actions;
+export const { setMainUnit, setRootFolders, setRootFiles, setSelectedFolder, addFileRoot } =
+  fileSystemSlice.actions;
 export default fileSystemSlice.reducer;

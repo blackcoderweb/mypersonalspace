@@ -3,53 +3,38 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  updateFileVersion,
-  updateParentFolder,
-} from "../features/fileSystem/fileSystemSlice";
 import PropTypes from "prop-types";
-import { upoloadFile } from "../api/files";
-import { JSONPath } from "jsonpath-plus";
+import {
+  setSelectedFolder,
+  uploadFileThunk,
+} from "../features/fileSystem/fileSystemSlice";
 
-export const FileModal = ({fileParentId, action, title, label }) => {
+export const FileModal = ({ action, title, label }) => {
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  const [file, setFile] = useState('')
-  const [selectedFile, setSelectedFile] = useState("");
-  const [fileUrl, setFileUrl] = useState("");
-  const [tags, setTags] = useState("");
+  const [file, setFile] = useState("");
 
   const dispatch = useDispatch();
-  const { parentFolder, selectedFolder, mainUnit } = useSelector((state) => state.fileSystem)
+  const { selectedFolder } = useSelector((state) => state.fileSystem);
+
   const handleUploadFile = async () => {
-    // if (selectedFile) {
-    //   dispatch(
-    //     uploadFile({ selectedFile, fileUrl, tags, parentFolder, ext: true })
-    //   );
-    //   dispatch(updateParentFolder({ parentFolder: parentFolder }));
-    //   setShow(false);
-    //   setSelectedFile("");
-    // }
-    const result = JSONPath({
-      path: `$..children[?(@.id=='${selectedFolder}')]`,
-      json: mainUnit,
-    })
-    try {
-      const formData = new FormData();
-      formData['formFile'] = file
-      const response = await upoloadFile(selectedFolder, result[0].fullPath, formData)
-      console.log(response)
-    } catch (error) {
-      console.log(error)
+    const formData = new FormData();
+    formData["formFile"] = file;
+
+    if (file) {
+      dispatch(uploadFileThunk({ formData, parentFolderId: selectedFolder }));
+      dispatch(setSelectedFolder(selectedFolder));
+      setShow(false);
+      setFile("");
     }
   };
 
   const handleUpdateFileVersion = () => {
-    if (selectedFile) {
-      setSelectedFile("");
+    if (file) {
+      setFile("");
     }
   };
 
@@ -58,7 +43,7 @@ export const FileModal = ({fileParentId, action, title, label }) => {
       {action === "upload" ? (
         <Button
           id="uploadFileButton"
-          style={{ width: "10rem"}}
+          style={{ width: "10rem" }}
           onClick={handleShow}
         >
           <i className="fa-solid fa-file-arrow-up"></i> Subir archivo
@@ -82,23 +67,18 @@ export const FileModal = ({fileParentId, action, title, label }) => {
               <Form.Control
                 type="file"
                 onChange={(e) => {
-                  setFile(e.target.files[0])
-                  setSelectedFile(e.target.files[0]["name"]);
-                  setFileUrl(e.target.value);
+                  setFile(e.target.files[0]);
                 }}
               />
             </Form.Group>
           </Form>
-          {selectedFile && <p>Archivo seleccionado: {selectedFile}</p>}
+          {file && <p>Archivo seleccionado: {file.name}</p>}
           <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
             <Form.Label>Ingrese las etiquetas separadas por coma</Form.Label>
             <Form.Control
               type="text"
               placeholder="Ej: factura cliente, ventas enero"
               autoFocus
-              onChange={(e) => {
-                setTags(e.target.value);
-              }}
             />
           </Form.Group>
         </Modal.Body>
@@ -108,7 +88,9 @@ export const FileModal = ({fileParentId, action, title, label }) => {
           </Button>
           <Button
             id="modalButton"
-            onClick={action === "upload" ? handleUploadFile : handleUpdateFileVersion}
+            onClick={
+              action === "upload" ? handleUploadFile : handleUpdateFileVersion
+            }
           >
             Aceptar
           </Button>

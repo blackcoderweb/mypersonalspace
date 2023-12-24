@@ -22,7 +22,7 @@ export const Hero = () => {
         width: "calc(100% - 20rem)",
         height: "90vh",
         alignItems: "center",
-        paddingTop: "3rem",
+        paddingTop: "1rem",
       }}
     >
       <Row className="d-flex gap-1 pb-2">
@@ -46,7 +46,7 @@ export const Hero = () => {
         id="folders-section"
         style={{
           width: "95%",
-          height: "35vh",
+          height: "40vh",
           overflowY: "auto",
           overflowX: "hidden",
         }}
@@ -78,11 +78,15 @@ export const Hero = () => {
           </>
         )}
       </section>
-      <section id="files-section" style={{ width: "95%", height: "35vh" }}>
+      <section id="files-section" style={{
+          width: "95%",
+          height: "40vh",
+          overflowY: "auto",
+          overflowX: "hidden",
+        }}>
         {files.length > 0 && (
           <>
             <div
-              className="pt-3"
               style={{
                 position: "sticky",
                 top: 0,
@@ -94,7 +98,7 @@ export const Hero = () => {
               <hr />
             </div>
 
-            <Row xs={2} md={6} className="g-2 pb-5">
+            <Row xs={2} md={6} className="g-2">
               {files &&
                 files.map((file) => (
                   <FolderFileItem

@@ -4,7 +4,7 @@ import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  createFolder,
+  createFolderThunk,
   setSelectedFolder,
 } from "../features/fileSystem/fileSystemSlice";
 import propTypes from "prop-types";
@@ -20,11 +20,11 @@ export const FolderModal = ({ action, title, label, buttonText, id }) => {
 
   const handleSubmitCreateFolder = (e) => {
     e.preventDefault();
-    dispatch(createFolder({ folderName, parentFolderId: selectedFolder }));
+    dispatch(createFolderThunk({ folderName, parentFolderId: selectedFolder }));
     setShow(false);
   };
   const handleCreateFolder = () => {
-    dispatch(createFolder({ folderName, parentFolderId: selectedFolder }));
+    dispatch(createFolderThunk({ folderName, parentFolderId: selectedFolder }));
     dispatch(setSelectedFolder(selectedFolder));
     setShow(false);
   };

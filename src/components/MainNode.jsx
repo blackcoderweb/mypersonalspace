@@ -36,6 +36,7 @@ export const MainNode = () => {
     const fetchFiles = async () => {
       const resp = await getFiles();
       dispatch(setRootFiles(resp));
+      console.log(resp);
     };
     fetchFiles();
   }, [dispatch]);
