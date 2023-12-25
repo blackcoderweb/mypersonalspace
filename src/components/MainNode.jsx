@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import Card from "react-bootstrap/Card";
 import { FolderNode } from "./FolderNode";
 import { getFolders } from "../api/folders";
@@ -25,18 +25,18 @@ export const MainNode = () => {
 
   useEffect(() => {
     const fetchFolders = async () => {
-      const resp = await getFolders();
-      dispatch(setMainUnit(resp));
-      dispatch(setRootFolders(resp.folder.children));
+      const response = await getFolders();
+      dispatch(setMainUnit(response));
+      dispatch(setRootFolders(response.folder.children));
     };
     fetchFolders();
   }, [dispatch]); 
 
   useEffect(() => {
     const fetchFiles = async () => {
-      const resp = await getFiles();
-      dispatch(setRootFiles(resp));
-      console.log(resp);
+      const response = await getFiles();
+      dispatch(setRootFiles(response));
+      return response;
     };
     fetchFiles();
   }, [dispatch]);

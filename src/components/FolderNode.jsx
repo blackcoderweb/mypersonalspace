@@ -1,7 +1,10 @@
 import { useState } from "react";
 import PropTypes from "prop-types";
 import { useDispatch, useSelector } from "react-redux";
-import { setSelectedFolder } from "../features/fileSystem/fileSystemSlice";
+import {
+  getFilesByFolderIdThunk,
+  setSelectedFolder,
+} from "../features/fileSystem/fileSystemSlice";
 
 export const FolderNode = ({ folder, level = 1 }) => {
   const [expanded, setExpanded] = useState(false);
@@ -13,6 +16,7 @@ export const FolderNode = ({ folder, level = 1 }) => {
   const handleExpanded = () => {
     setExpanded((prevExpanded) => !prevExpanded);
     dispatch(setSelectedFolder(folder.id));
+    dispatch(getFilesByFolderIdThunk(folder.id));
   };
 
   return (

@@ -5,10 +5,12 @@ import { Row, Col } from "react-bootstrap";
 import { FolderFileItem } from "./FolderFileItem";
 import { useFindChildren } from "../hooks/useFindChildren";
 import { useSelector } from "react-redux";
+import useAuth from "../hooks/useAuth";
 
 export const Hero = () => {
-  const selectedFolder = useSelector(
-    (state) => state.fileSystem.selectedFolder
+  const { auth } = useAuth();
+  const { selectedFolder, filesByFolderId } = useSelector(
+    (state) => state.fileSystem
   );
 
   const { files, folders } = useFindChildren(selectedFolder);
@@ -78,38 +80,71 @@ export const Hero = () => {
           </>
         )}
       </section>
-      <section id="files-section" style={{
+      <section
+        id="files-section"
+        style={{
           width: "95%",
           height: "40vh",
           overflowY: "auto",
           overflowX: "hidden",
-        }}>
-        {files.length > 0 && (
-          <>
-            <div
-              style={{
-                position: "sticky",
-                top: 0,
-                backgroundColor: "#f8f9fa",
-                zIndex: "1",
-              }}
-            >
-              <h5>Archivos</h5>
-              <hr />
-            </div>
-
-            <Row xs={2} md={6} className="g-2">
-              {files &&
-                files.map((file) => (
-                  <FolderFileItem
-                    key={file.id}
-                    type="archivo"
-                    item={file}
-                    imageSrc="/images/file.png"
-                  />
-                ))}
-            </Row>
-          </>
+        }}
+      >
+        {selectedFolder === auth ? (
+                  files.length > 0 && (
+                    <>
+                      <div
+                        style={{
+                          position: "sticky",
+                          top: 0,
+                          backgroundColor: "#f8f9fa",
+                          zIndex: "1",
+                        }}
+                      >
+                        <h5>Archivos</h5>
+                        <hr />
+                      </div>
+          
+                      <Row xs={2} md={6} className="g-2">
+                        {files &&
+                          files.map((file) => (
+                            <FolderFileItem
+                              key={file.id}
+                              type="archivo"
+                              item={file}
+                              imageSrc="/images/file.png"
+                            />
+                          ))}
+                      </Row>
+                    </>
+                  )
+        ) : (
+          filesByFolderId.length > 0 && (
+            <>
+              <div
+                style={{
+                  position: "sticky",
+                  top: 0,
+                  backgroundColor: "#f8f9fa",
+                  zIndex: "1",
+                }}
+              >
+                <h5>Archivos</h5>
+                <hr />
+              </div>
+  
+              <Row xs={2} md={6} className="g-2">
+                {filesByFolderId &&
+                  filesByFolderId.map((file) => (
+                    <FolderFileItem
+                      key={file.id}
+                      type="archivo"
+                      item={file}
+                      imageSrc="/images/file.png"
+                    />
+                  ))}
+              </Row>
+            </>
+          )
         )}
       </section>
     </Card>

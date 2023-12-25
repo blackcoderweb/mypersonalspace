@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { JSONPath } from "jsonpath-plus";
 import { createFolder } from "../../api/folders";
-import { uploadFile } from "../../api/files";
+import { getFilesByFolder, uploadFile } from "../../api/files";
 
 export const createFolderThunk = createAsyncThunk(
   "fileSystem/createFolderThunk",
@@ -43,6 +43,14 @@ export const createFolderThunk = createAsyncThunk(
   }
 );
 
+export const getFilesByFolderIdThunk = createAsyncThunk(
+  "fileSystem/getFilesByFolderIdThunk",
+  async (selectedFolder) => {
+    const resp = await getFilesByFolder(selectedFolder);
+    return resp; // El resultado de esta promesa se manejará en el extraReducer
+  }
+);
+
 export const uploadFileThunk = createAsyncThunk(
   "fileSystem/uploadFileThunk",
   async (fileData, { getState, dispatch }) => {
@@ -56,7 +64,7 @@ export const uploadFileThunk = createAsyncThunk(
           formData
         );
         dispatch(addFileRoot(response));
-        console.log(response);
+        return response;
         
       } catch (error) {
         console.log(error);
@@ -72,8 +80,9 @@ export const uploadFileThunk = createAsyncThunk(
           result[0].fullPath,
           formData
         );
-        //Ejecutar método getFilesByFolderId para actualizar el estado
-        console.log(response);
+        //Ejecutar método getFilesByFolderIdThunk para actualizar el estado
+        dispatch(getFilesByFolderIdThunk(parentFolderId));
+        return response;
       } catch (error) {
         console.log(error);
       }
@@ -87,6 +96,7 @@ const initialState = {
   mainUnit: {},
   rootFolders: [],
   rootFiles: [],
+  filesByFolderId: [],
   selectedFolder: user,
 };
 
@@ -103,11 +113,14 @@ const fileSystemSlice = createSlice({
     setRootFiles: (state, action) => {
       state.rootFiles = action.payload;
     },
-    setSelectedFolder: (state, action) => {
-      state.selectedFolder = action.payload;
-    },
     addFileRoot: (state, action) => {
       state.rootFiles.push(action.payload);
+    },
+    setFilesByFolderId: (state, action) => {
+      state.filesByFolderId = action.payload;
+    },
+    setSelectedFolder: (state, action) => {
+      state.selectedFolder = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -115,6 +128,10 @@ const fileSystemSlice = createSlice({
       // manejar el estado de éxito y añadir la carpeta al estado
       state.mainUnit = action.payload;
       state.rootFolders = action.payload.children;
+    });
+    builder.addCase(getFilesByFolderIdThunk.fulfilled, (state, action) => {
+      // manejar el estado de éxito y añadir la carpeta al estado
+      state.filesByFolderId = action.payload;
     });
   },
 });

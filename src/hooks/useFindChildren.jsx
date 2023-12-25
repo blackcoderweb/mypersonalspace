@@ -1,7 +1,6 @@
 import { useSelector } from "react-redux";
 import { JSONPath } from "jsonpath-plus";
 import useAuth from "./useAuth";
-import { getFilesByFolder } from "../api/files";
 import { useEffect, useState } from "react";
 
 export const useFindChildren = (selectedFolder) => {
@@ -27,12 +26,6 @@ export const useFindChildren = (selectedFolder) => {
       } else {
         setFolders([]);
       }
-
-      const fetchFiles = async () => {
-        const resp = await getFilesByFolder(selectedFolder);
-        setFiles(resp);
-      };
-      fetchFiles();
     }
   }, [selectedFolder, auth, mainUnit, rootFiles, rootFolders]);
 
