@@ -6,14 +6,17 @@ import { FolderFileItem } from "./FolderFileItem";
 import { useFindChildren } from "../hooks/useFindChildren";
 import { useSelector } from "react-redux";
 import useAuth from "../hooks/useAuth";
+import { getFullPath } from "../helpers/getFullPath";
 
 export const Hero = () => {
   const { auth } = useAuth();
-  const { selectedFolder, filesByFolderId } = useSelector(
+  const { selectedFolder, filesByFolderId, mainUnit } = useSelector(
     (state) => state.fileSystem
   );
 
   const { files, folders } = useFindChildren(selectedFolder);
+
+  //const path = getFullPath(selectedFolder, auth, mainUnit);
 
   return (
     <Card
@@ -44,6 +47,7 @@ export const Hero = () => {
           />
         </Col>
       </Row>
+      <div>{/*path*/}</div>
       <section
         id="folders-section"
         style={{

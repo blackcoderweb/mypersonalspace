@@ -6,6 +6,8 @@ import Card from "react-bootstrap/Card";
 import Alert from "react-bootstrap/Alert";
 import { useState } from "react";
 import { login } from "../../api/auth";
+import Spinner from "react-bootstrap/Spinner";
+import useAuth from "../../hooks/useAuth";
 
 /*const validate = (values) => {
   const errors = {};
@@ -23,6 +25,7 @@ import { login } from "../../api/auth";
 export const Login = () => {
   const [error, setError] = useState(false);
   const [show, setShow] = useState(null);
+  const { loading, setLoading } = useAuth();
 
   const formik = useFormik({
     initialValues: {
@@ -34,13 +37,16 @@ export const Login = () => {
       password: Yup.string().required("Contraseña requerida"),
     }),
     onSubmit: async (values) => {
+      setLoading(true);
       try {
         const response = await login(values);
         localStorage.setItem("token-my-personal-workspace", response.token);
         localStorage.setItem("user-my-personal-workspace", values.userName);
         location.href = "/dashboard";
       } catch (error) {
-        console.log(error)
+        console.log(error);
+      } finally {
+        setLoading(false);
       }
     },
   });
@@ -90,6 +96,16 @@ export const Login = () => {
           </Form.Group>
           <div className="d-grid gap-2">
             <Button variant="primary" type="submit">
+              {loading && (
+                <Spinner
+                  as="span"
+                  animation="border"
+                  size="sm"
+                  role="status"
+                  aria-hidden="true"
+                  className="me-2"
+                />
+              )}
               Ingresar
             </Button>
           </div>
