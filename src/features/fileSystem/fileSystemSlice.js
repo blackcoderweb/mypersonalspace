@@ -17,25 +17,19 @@ export const createFolderThunk = createAsyncThunk(
       parent: "",
     };
 
-    const token = localStorage.getItem("token-my-personal-workspace");
-
     // Si estoy creando el folder en la raiz
     if (parentFolderId === user) {
-      folder.parent = user;
+      folder.parent = getState().fileSystem.mainUnit.folder.fullPath;
     } else {
       let parentFolder = JSONPath({
         path: `$..children[?(@.id=='${parentFolderId}')]`,
         json: getState().fileSystem.mainUnit,
       });
-      folder.parent = parentFolder[0].name;
+      folder.parent = parentFolder[0].fullPath;
     }
 
     try {
-      const resp = await createFolder(folder, {
-        headers: {
-          Authorization: token,
-        },
-      });
+      const resp = await createFolder(folder);
       return resp; // El resultado de esta promesa se manejará en el extraReducer
     } catch (error) {
       console.log(error);

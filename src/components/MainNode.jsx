@@ -14,8 +14,7 @@ export const MainNode = () => {
 
   const { auth } = useAuth();
 
-  const { rootFolders, selectedFolder } = useSelector((state) => state.fileSystem);
-
+  const { rootFolders, selectedFolder } = useSelector((state) => state.fileSystem);;
   const handleExpanded = () => {
     //When expanded, log the folders.
     //When collapsed, hide the folders.

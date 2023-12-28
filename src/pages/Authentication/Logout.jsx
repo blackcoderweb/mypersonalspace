@@ -7,7 +7,8 @@ export const Logout = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    localStorage.removeItem("user");
+    localStorage.removeItem("user-my-personal-workspace");
+    localStorage.removeItem("token-my-personal-workspace");
     setAuth(null);
     navigate("/");
   });
