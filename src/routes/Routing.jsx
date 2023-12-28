@@ -15,7 +15,7 @@ export const Routing = () => {
 
           <Route exact={true} path="/" element={<PrivateLayout />}>
             <Route exact={true} path="/dashboard" element={<Dashboard />} />
-            <Route exact={true} path="logout" element={<Logout/>} />
+            <Route exact={true} path="/logout" element={<Logout/>} />
           </Route>
 
           <Route path="*" element={<NotFound />} />
