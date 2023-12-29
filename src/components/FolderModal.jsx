@@ -8,10 +8,11 @@ import {
   setSelectedFolder,
 } from "../features/fileSystem/fileSystemSlice";
 import propTypes from "prop-types";
+import Spinner from 'react-bootstrap/Spinner';
 
 export const FolderModal = ({ action, title, label, buttonText, id }) => {
   const dispatch = useDispatch();
-  const selectedFolder = useSelector((state) => state.fileSystem.selectedFolder);
+  const {selectedFolder, loading} = useSelector((state) => state.fileSystem);
   const [show, setShow] = useState(false);
   const [folderName, setFolderName] = useState("");
 
@@ -57,27 +58,26 @@ export const FolderModal = ({ action, title, label, buttonText, id }) => {
       )}
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <h5>{title}</h5>
+          <h5>{loading ? "Creando carpeta...": title}</h5>
         </Modal.Header>
         <Modal.Body>
-          <Form
-            onSubmit={
-              action === "create"
-                ? handleSubmitCreateFolder
-                : handleSubmitUpdateFolder
-            }
-          >
-            <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-              <Form.Label>{label}</Form.Label>
-              <Form.Control
-                type="text"
-                value={folderName}
-                onChange={(e) => setFolderName(e.target.value)}
-                placeholder="Nombre de la carpeta"
-                autoFocus
-              />
-            </Form.Group>
-          </Form>
+          {loading ? (
+            <div className="d-flex justify-content-center">
+              <Spinner animation="border" variant="primary" />
+            </div>
+          ) : (
+            <Form onSubmit={action === "create" ? handleSubmitCreateFolder : handleSubmitUpdateFolder}>
+              <Form.Group className="mb-3" controlId="formBasicEmail">
+                <Form.Label>{label}</Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder="Nombre de la carpeta"
+                  value={folderName}
+                  onChange={(e) => setFolderName(e.target.value)}
+                />
+              </Form.Group>
+            </Form>
+          )}
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleClose}>

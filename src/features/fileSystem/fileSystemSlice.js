@@ -92,6 +92,7 @@ const initialState = {
   rootFiles: [],
   filesByFolderId: [],
   selectedFolder: user,
+  loading: false,
 };
 
 const fileSystemSlice = createSlice({
@@ -118,15 +119,33 @@ const fileSystemSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(createFolderThunk.fulfilled, (state, action) => {
+
+    //Folders
+    builder
+    .addCase(createFolderThunk.pending, (state) => {
+      state.loading = true;
+    })
+    .addCase(createFolderThunk.fulfilled, (state, action) => {
       // manejar el estado de éxito y añadir la carpeta al estado
       state.mainUnit = action.payload;
       state.rootFolders = action.payload.children;
-    });
-    builder.addCase(getFilesByFolderIdThunk.fulfilled, (state, action) => {
+      state.loading = false;
+    })
+    .addCase(createFolderThunk.rejected, (state) => {
+      state.loading = false;
+    })
+
+    //Files
+    .addCase(uploadFileThunk.pending, (state) => {
+      state.loading = true;
+    })
+    .addCase(getFilesByFolderIdThunk.fulfilled, (state, action) => {
       // manejar el estado de éxito y añadir la carpeta al estado
       state.filesByFolderId = action.payload;
-    });
+    })
+    .addCase(getFilesByFolderIdThunk.rejected, (state) => {
+      state.loading = false;
+    })
   },
 });
 
