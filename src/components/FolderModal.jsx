@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
@@ -8,36 +8,47 @@ import {
   setSelectedFolder,
 } from "../features/fileSystem/fileSystemSlice";
 import propTypes from "prop-types";
-import Spinner from 'react-bootstrap/Spinner';
+import Spinner from "react-bootstrap/Spinner";
 
 export const FolderModal = ({ action, title, label, buttonText, id }) => {
   const dispatch = useDispatch();
-  const {selectedFolder, loading} = useSelector((state) => state.fileSystem);
+  const { selectedFolder, loaderCreateFolder } = useSelector((state) => state.fileSystem);
   const [show, setShow] = useState(false);
   const [folderName, setFolderName] = useState("");
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
+  useEffect(() => {
+    if (!loaderCreateFolder) {
+      setShow(false);
+    }
+  }, [loaderCreateFolder]);
+
   const handleSubmitCreateFolder = (e) => {
     e.preventDefault();
     dispatch(createFolderThunk({ folderName, parentFolderId: selectedFolder }));
-    setShow(false);
+    dispatch(setSelectedFolder(selectedFolder));
+    setFolderName("");
   };
   const handleCreateFolder = () => {
     dispatch(createFolderThunk({ folderName, parentFolderId: selectedFolder }));
     dispatch(setSelectedFolder(selectedFolder));
-    setShow(false);
+    setFolderName("");
   };
 
   const handleUpdateFolder = () => {
-    dispatch(changeFolderName({folderId:id, newFolderName: folderName, ext: false}));
+    dispatch(
+      changeFolderName({ folderId: id, newFolderName: folderName, ext: false })
+    );
     setShow(false);
   };
 
   const handleSubmitUpdateFolder = (e) => {
     e.preventDefault();
-    dispatch(changeFolderName({folderId:id, newFolderName: folderName, ext: false}));
+    dispatch(
+      changeFolderName({ folderId: id, newFolderName: folderName, ext: false })
+    );
     setShow(false);
   };
 
@@ -58,15 +69,21 @@ export const FolderModal = ({ action, title, label, buttonText, id }) => {
       )}
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <h5>{loading ? "Creando carpeta...": title}</h5>
+          <h5>{loaderCreateFolder ? "Creando carpeta..." : title}</h5>
         </Modal.Header>
         <Modal.Body>
-          {loading ? (
+          {loaderCreateFolder ? (
             <div className="d-flex justify-content-center">
               <Spinner animation="border" variant="primary" />
             </div>
           ) : (
-            <Form onSubmit={action === "create" ? handleSubmitCreateFolder : handleSubmitUpdateFolder}>
+            <Form
+              onSubmit={
+                action === "create"
+                  ? handleSubmitCreateFolder
+                  : handleSubmitUpdateFolder
+              }
+            >
               <Form.Group className="mb-3" controlId="formBasicEmail">
                 <Form.Label>{label}</Form.Label>
                 <Form.Control

@@ -14,7 +14,7 @@ export const MainNode = () => {
 
   const { auth } = useAuth();
 
-  const { rootFolders, selectedFolder } = useSelector((state) => state.fileSystem);;
+  const { rootFolders, selectedFolder } = useSelector((state) => state.fileSystem);
   const handleExpanded = () => {
     //When expanded, log the folders.
     //When collapsed, hide the folders.
@@ -25,7 +25,7 @@ export const MainNode = () => {
   useEffect(() => {
     const fetchFolders = async () => {
       const response = await getFolders();
-      dispatch(setMainUnit(response));
+      dispatch(setMainUnit(response.folder));
       dispatch(setRootFolders(response.folder.children));
     };
     fetchFolders();

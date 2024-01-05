@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
@@ -19,7 +19,13 @@ export const FileModal = ({ action, title, label }) => {
   const [file, setFile] = useState("");
 
   const dispatch = useDispatch();
-  const { selectedFolder, loading } = useSelector((state) => state.fileSystem);
+  const { selectedFolder, loaderUploadFile } = useSelector((state) => state.fileSystem);
+
+  useEffect(() => {
+    if (!loaderUploadFile) {
+      setShow(false);
+    }
+  }, [loaderUploadFile]);
 
   const handleUploadFile = async () => {
     const formData = new FormData();
@@ -28,7 +34,6 @@ export const FileModal = ({ action, title, label }) => {
     if (file) {
       dispatch(uploadFileThunk({ formData, parentFolderId: selectedFolder }));
       dispatch(setSelectedFolder(selectedFolder));
-      setShow(false);
       setFile("");
     }
   };
@@ -58,11 +63,11 @@ export const FileModal = ({ action, title, label }) => {
         <Modal show={show} onHide={handleClose}>
           <Modal.Header closeButton>
             <Modal.Title>
-              <h5>{loading ? "Subiendo archivo..." : title}</h5>
+              <h5>{loaderUploadFile ? "Subiendo archivo..." : title}</h5>
             </Modal.Title>
           </Modal.Header>
           <Modal.Body>
-          {loading ? (
+          {loaderUploadFile ? (
               <div className="d-flex justify-content-center">
                 <Spinner animation="border" variant="primary" />
               </div>

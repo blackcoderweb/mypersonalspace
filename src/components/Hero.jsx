@@ -10,7 +10,7 @@ import { getFullPath } from "../helpers/getFullPath";
 
 export const Hero = () => {
   const { auth } = useAuth();
-  const { selectedFolder, filesByFolderId, mainUnit } = useSelector(
+  const { selectedFolder, filesByFolderId, mainUnit, loaderFoldersFiles } = useSelector(
     (state) => state.fileSystem
   );
 
@@ -31,7 +31,7 @@ export const Hero = () => {
       }}
     >
       <Row className="d-flex gap-1 pb-2">
-        <Col xm={6}>
+        <Col>
           <FolderModal
             action="create"
             title="Nueva carpeta"
@@ -39,7 +39,7 @@ export const Hero = () => {
             buttonText="Crear"
           />
         </Col>
-        <Col xm={6}>
+        <Col>
           <FileModal
             action="upload"
             title="Subir archivo"
@@ -57,31 +57,32 @@ export const Hero = () => {
           overflowX: "hidden",
         }}
       >
-        {folders.length > 0 && (
-          <>
-            <div
-              style={{
-                position: "sticky",
-                top: 0,
-                backgroundColor: "#f8f9fa",
-                zIndex: "1",
-              }}
-            >
-              <h5>Carpetas</h5>
-              <hr />
-            </div>
-
-            <Row xs={2} md={6} className="g-2">
-              {folders.map((folder) => (
-                <FolderFileItem
-                  key={folder.id}
-                  type="carpeta"
-                  item={folder}
-                  imageSrc="/images/folder.png"
-                />
-              ))}
-            </Row>
-          </>
+        <div
+          style={{
+            position: "sticky",
+            top: 0,
+            backgroundColor: "#f8f9fa",
+            zIndex: "1",
+          }}
+        >
+          <h5>Carpetas</h5>
+          <hr />
+        </div>
+        {loaderFoldersFiles ? (
+          <div className="d-flex justify-content-center">Cargando...</div>
+        ) : folders.length > 0 ? (
+          <Row xs={2} md={6} className="g-2">
+            {folders.map((folder) => (
+              <FolderFileItem
+                key={folder.id}
+                type="carpeta"
+                item={folder}
+                imageSrc="/images/folder.png"
+              />
+            ))}
+          </Row>
+        ) : (
+          <div className="d-flex justify-content-center">No hay carpetas</div>
         )}
       </section>
       <section
@@ -94,48 +95,52 @@ export const Hero = () => {
         }}
       >
         {selectedFolder === auth ? (
-                  files.length > 0 && (
-                    <>
-                      <div
-                        style={{
-                          position: "sticky",
-                          top: 0,
-                          backgroundColor: "#f8f9fa",
-                          zIndex: "1",
-                        }}
-                      >
-                        <h5>Archivos</h5>
-                        <hr />
-                      </div>
-          
-                      <Row xs={2} md={6} className="g-2">
-                        {files &&
-                          files.map((file) => (
-                            <FolderFileItem
-                              key={file.id}
-                              type="archivo"
-                              item={file}
-                              imageSrc="/images/file.png"
-                            />
-                          ))}
-                      </Row>
-                    </>
-                  )
-        ) : (
-          filesByFolderId.length > 0 && (
-            <>
-              <div
-                style={{
-                  position: "sticky",
-                  top: 0,
-                  backgroundColor: "#f8f9fa",
-                  zIndex: "1",
-                }}
-              >
-                <h5>Archivos</h5>
-                <hr />
+          <>
+            <div
+              style={{
+                position: "sticky",
+                top: 0,
+                backgroundColor: "#f8f9fa",
+                zIndex: "1",
+              }}
+            >
+              <h5>Archivos</h5>
+              <hr />
+            </div>
+            {loaderFoldersFiles ? (
+              <div className="d-flex justify-content-center">Cargando...</div>
+            ) : files.length > 0 ? (
+              <Row xs={2} md={6} className="g-2">
+                {files &&
+                  files.map((file) => (
+                    <FolderFileItem
+                      key={file.id}
+                      type="archivo"
+                      item={file}
+                      imageSrc="/images/file.png"
+                    />
+                  ))}
+              </Row>
+            ) : (
+              <div className="d-flex justify-content-center">
+                No hay archivos
               </div>
-  
+            )}
+          </>
+        ) : (
+          <>
+            <div
+              style={{
+                position: "sticky",
+                top: 0,
+                backgroundColor: "#f8f9fa",
+                zIndex: "1",
+              }}
+            >
+              <h5>Archivos</h5>
+              <hr />
+            </div>
+            {loaderFoldersFiles ? (<div className="d-flex justify-content-center">Cargando...</div>) : filesByFolderId.length > 0 ? (
               <Row xs={2} md={6} className="g-2">
                 {filesByFolderId &&
                   filesByFolderId.map((file) => (
@@ -147,8 +152,12 @@ export const Hero = () => {
                     />
                   ))}
               </Row>
-            </>
-          )
+            ) : (
+              <div className="d-flex justify-content-center">
+                No hay archivos
+              </div>
+            )}
+          </>
         )}
       </section>
     </Card>

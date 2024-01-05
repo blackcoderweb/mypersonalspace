@@ -2,35 +2,38 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { JSONPath } from "jsonpath-plus";
 import { createFolder } from "../../api/folders";
 import { getFilesByFolder, uploadFile } from "../../api/files";
+import { get } from "../../api";
 
 export const createFolderThunk = createAsyncThunk(
   "fileSystem/createFolderThunk",
-  async (folderData, { getState }) => {
+  async (folderData, { getState, dispatch }) => {
     let { folderName, parentFolderId } = folderData;
 
     if (folderName == "") {
       folderName = "Nueva carpeta";
     }
 
-    let folder = {
+    let newFolder = {
       folderName: folderName,
       parent: "",
     };
 
     // Si estoy creando el folder en la raiz
     if (parentFolderId === user) {
-      folder.parent = getState().fileSystem.mainUnit.folder.fullPath;
+      newFolder.parent = getState().fileSystem.mainUnit.fullPath;
     } else {
       let parentFolder = JSONPath({
         path: `$..children[?(@.id=='${parentFolderId}')]`,
         json: getState().fileSystem.mainUnit,
       });
-      folder.parent = parentFolder[0].fullPath;
+      newFolder.parent = parentFolder[0].fullPath;
     }
-
     try {
-      const resp = await createFolder(folder);
-      return resp; // El resultado de esta promesa se manejará en el extraReducer
+      const resp = await createFolder(newFolder);
+      // manejar el estado de éxito y añadir la carpeta al estado
+      dispatch(setMainUnit(resp));
+      dispatch(setRootFolders(resp.children));
+      return resp;
     } catch (error) {
       console.log(error);
     }
@@ -54,12 +57,11 @@ export const uploadFileThunk = createAsyncThunk(
       try {
         const response = await uploadFile(
           parentFolderId,
-          getState().fileSystem.mainUnit.folder.fullPath,
+          getState().fileSystem.mainUnit.fullPath,
           formData
         );
         dispatch(addFileRoot(response));
         return response;
-        
       } catch (error) {
         console.log(error);
       }
@@ -92,7 +94,9 @@ const initialState = {
   rootFiles: [],
   filesByFolderId: [],
   selectedFolder: user,
-  loading: false,
+  loaderCreateFolder: false,
+  loaderUploadFile: false,
+  loaderFoldersFiles: false,
 };
 
 const fileSystemSlice = createSlice({
@@ -119,36 +123,47 @@ const fileSystemSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-
     //Folders
     builder
-    .addCase(createFolderThunk.pending, (state) => {
-      state.loading = true;
-    })
-    .addCase(createFolderThunk.fulfilled, (state, action) => {
-      // manejar el estado de éxito y añadir la carpeta al estado
-      state.mainUnit = action.payload;
-      state.rootFolders = action.payload.children;
-      state.loading = false;
-    })
-    .addCase(createFolderThunk.rejected, (state) => {
-      state.loading = false;
-    })
+      .addCase(createFolderThunk.pending, (state) => {
+        state.loaderCreateFolder = true;
+      })
+      .addCase(createFolderThunk.fulfilled, (state) => {
+        state.loaderCreateFolder = false;
+      })
+      .addCase(createFolderThunk.rejected, (state) => {
+        state.loaderCreateFolder = false;
+      })
 
-    //Files
-    .addCase(uploadFileThunk.pending, (state) => {
-      state.loading = true;
-    })
-    .addCase(getFilesByFolderIdThunk.fulfilled, (state, action) => {
-      // manejar el estado de éxito y añadir la carpeta al estado
-      state.filesByFolderId = action.payload;
-    })
-    .addCase(getFilesByFolderIdThunk.rejected, (state) => {
-      state.loading = false;
-    })
+      //Files
+      .addCase(uploadFileThunk.pending, (state) => {
+        state.loaderUploadFile = true;
+      })
+      .addCase(uploadFileThunk.fulfilled, (state) => {
+        state.loaderUploadFile = false;
+      })
+      .addCase(uploadFileThunk.rejected, (state) => {
+        state.loaderUploadFile = false;
+      })
+      .addCase(getFilesByFolderIdThunk.pending, (state) => {
+        state.loaderFoldersFiles = true;
+      })
+      .addCase(getFilesByFolderIdThunk.fulfilled, (state, action) => {
+        // manejar el estado de éxito y añadir la carpeta al estado
+        state.filesByFolderId = action.payload;
+        state.loaderFoldersFiles = false;
+      })
+      .addCase(getFilesByFolderIdThunk.rejected, (state) => {
+        state.loaderFoldersFiles = false;
+      });
   },
 });
 
-export const { setMainUnit, setRootFolders, setRootFiles, setSelectedFolder, addFileRoot } =
-  fileSystemSlice.actions;
+export const {
+  setMainUnit,
+  setRootFolders,
+  setRootFiles,
+  setSelectedFolder,
+  addFileRoot,
+} = fileSystemSlice.actions;
 export default fileSystemSlice.reducer;
