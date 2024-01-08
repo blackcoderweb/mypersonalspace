@@ -9,21 +9,32 @@ import {
 } from "../features/fileSystem/fileSystemSlice";
 import propTypes from "prop-types";
 import Spinner from "react-bootstrap/Spinner";
+import Alert from 'react-bootstrap/Alert';
 
 export const FolderModal = ({ action, title, label, buttonText, id }) => {
   const dispatch = useDispatch();
-  const { selectedFolder, loaderCreateFolder } = useSelector((state) => state.fileSystem);
+  const { selectedFolder, loaderCreateFolder, nameExists } = useSelector(
+    (state) => state.fileSystem
+  );
   const [show, setShow] = useState(false);
+  const [alertShow, setAlertShow] = useState(false);
   const [folderName, setFolderName] = useState("");
 
   const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+  const handleShow = () => {
+    setShow(true);
+    setAlertShow(false);
+  }
 
   useEffect(() => {
     if (!loaderCreateFolder) {
-      setShow(false);
+      if (nameExists) {
+        setAlertShow(true);
+      } else {
+        setShow(false);
+      }
     }
-  }, [loaderCreateFolder]);
+  }, [loaderCreateFolder, nameExists]);
 
   const handleSubmitCreateFolder = (e) => {
     e.preventDefault();
@@ -85,6 +96,17 @@ export const FolderModal = ({ action, title, label, buttonText, id }) => {
               }
             >
               <Form.Group className="mb-3" controlId="formBasicEmail">
+                {alertShow ? (
+                  <Alert
+                    variant="danger"
+                    onClose={() => setAlertShow(false)}
+                    dismissible
+                  >
+                    <Alert.Heading as="p">
+                      Ya existe una carpeta con ese nombre en esta ubicación
+                    </Alert.Heading>
+                  </Alert>
+                ): ""}
                 <Form.Label>{label}</Form.Label>
                 <Form.Control
                   type="text"
